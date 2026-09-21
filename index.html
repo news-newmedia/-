@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEWS HUB</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f4f7;
+      color: #20242a;
+    }
+
+    header {
+      background: #17243a;
+      color: white;
+      padding: 25px 8%;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      color: #cbd5e1;
+      margin-bottom: 0;
+    }
+
+    nav {
+      background: white;
+      padding: 16px 8%;
+      border-bottom: 1px solid #ddd;
+    }
+
+    nav a {
+      color: #26364d;
+      text-decoration: none;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .section-title {
+      border-left: 5px solid #e34b4b;
+      padding-left: 12px;
+    }
+
+    .news-card {
+      background: white;
+      padding: 22px;
+      margin: 18px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #0000000b;
+    }
+
+    .category {
+      color: #d94343;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .news-card h3 {
+      margin: 10px 0;
+    }
+
+    .news-card p {
+      color: #596273;
+      line-height: 1.7;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #8992a0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #77808e;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>NEWS HUB</h1>
+    <p>さまざまなニュースを、ここから。</p>
+  </header>
+
+  <nav>
+    <a href="#">トップ</a>
+    <a href="#society">社会</a>
+    <a href="#technology">テクノロジー</a>
+    <a href="#entertainment">エンタメ</a>
+    <a href="#sports">スポーツ</a>
+  </nav>
+
+  <main>
+    <h2 class="section-title">新着ニュース</h2>
+
+    <article class="news-card" id="society">
+      <span class="category">社会</span>
+      <h3>ここにニュースの見出しが入ります</h3>
+      <p>ここにニュースの概要を掲載します。実際の記事を追加するときは、内容や出典を確認しましょう。</p>
+      <div class="meta">サンプル記事 ・ NEWS HUB</div>
+    </article>
+
+    <article class="news-card" id="technology">
+      <span class="category">テクノロジー</span>
+      <h3>新しい技術に関するニュース</h3>
+      <p>科学技術やインターネットなどの話題を掲載する場所です。</p>
+      <div class="meta">サンプル記事 ・ NEWS HUB</div>
+    </article>
+
+    <article class="news-card" id="entertainment">
+      <span class="category">エンタメ</span>
+      <h3>エンターテインメントの話題</h3>
+      <p>映画、音楽、ゲームなどの話題を掲載する場所です。</p>
+      <div class="meta">サンプル記事 ・ NEWS HUB</div>
+    </article>
+
+    <article class="news-card" id="sports">
+      <span class="category">スポーツ</span>
+      <h3>スポーツに関するニュース</h3>
+      <p>スポーツの試合結果や選手に関する記事を掲載する場所です。</p>
+      <div class="meta">サンプル記事 ・ NEWS HUB</div>
+    </article>
+  </main>
+
+  <footer>
+    NEWS HUB - ニュースサイト制作プロジェクト
+  </footer>
+</body>
+</html>
