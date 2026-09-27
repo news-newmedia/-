@@ -1,165 +1,2518 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>NEWS HUB</title>
+
+  <meta
+    name="description"
+    content="AIが最新ニュースを収集・整理するニュースサイト"
+  >
+
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f4f7;
-      color: #20242a;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
+
+      background: #f5f6f8;
+      color: #111;
+      line-height: 1.6;
     }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
 
     header {
-      background: #17243a;
-      color: white;
-      padding: 25px 8%;
-    }
+      position: sticky;
+      top: 0;
+      z-index: 1000;
 
-    header h1 {
-      margin: 0;
-      font-size: 32px;
-      letter-spacing: 2px;
-    }
-
-    header p {
-      color: #cbd5e1;
-      margin-bottom: 0;
-    }
-
-    nav {
-      background: white;
-      padding: 16px 8%;
+      background: rgba(255,255,255,0.96);
       border-bottom: 1px solid #ddd;
+
+      backdrop-filter: blur(10px);
     }
 
-    nav a {
-      color: #26364d;
-      text-decoration: none;
-      margin-right: 20px;
-      font-weight: bold;
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+
+      height: 64px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 20px;
     }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-button {
+      border: 1px solid #ddd;
+      background: #fff;
+
+      padding: 8px 13px;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .header-button:hover {
+      background: #f1f1f1;
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    .genre-nav {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+
+      overflow-x: auto;
+    }
+
+    .genre-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+
+      display: flex;
+      gap: 5px;
+
+      padding: 10px 20px;
+
+      white-space: nowrap;
+    }
+
+    .genre-button {
+      border: none;
+      background: transparent;
+
+      padding: 8px 13px;
+
+      border-radius: 20px;
+
+      cursor: pointer;
+
+      color: #555;
+    }
+
+    .genre-button:hover {
+      background: #f1f1f1;
+    }
+
+    .genre-button.active {
+      background: #111;
+      color: #fff;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
 
     main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      padding: 28px 20px 70px;
     }
 
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 20px;
+
+      color: #777;
+      font-size: 13px;
+    }
+
+    .loading {
+      display: none;
+
+      padding: 70px 20px;
+
+      text-align: center;
+      color: #777;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .error {
+      display: none;
+
+      background: #fff1f1;
+      border: 1px solid #ffcaca;
+
+      padding: 18px;
+
+      border-radius: 10px;
+
+      margin-bottom: 20px;
+
+      color: #a00000;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    /* =========================
+       FEATURED
+    ========================= */
+
+    .featured {
+      display: grid;
+
+      grid-template-columns: 2fr 1fr;
+
+      gap: 18px;
+
+      margin-bottom: 30px;
+    }
+
+    .featured-main {
+      background: #111;
+      color: #fff;
+
+      min-height: 350px;
+
+      border-radius: 14px;
+
+      padding: 30px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-main::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at 70% 20%,
+          rgba(255,255,255,0.16),
+          transparent 40%
+        );
+    }
+
+    .featured-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .featured-label {
+      display: inline-block;
+
+      background: rgba(255,255,255,0.15);
+
+      padding: 5px 9px;
+
+      border-radius: 5px;
+
+      font-size: 12px;
+
+      margin-bottom: 12px;
+    }
+
+    .featured-title {
+      font-size: 31px;
+      line-height: 1.35;
+
+      font-weight: 800;
+
+      margin-bottom: 12px;
+    }
+
+    .featured-summary {
+      color: #ddd;
+
+      font-size: 14px;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+    }
+
+    .side-news {
+      display: flex;
+      flex-direction: column;
+
+      gap: 12px;
+    }
+
+    .side-card {
+      background: #fff;
+
+      border: 1px solid #e5e5e5;
+
+      border-radius: 12px;
+
+      padding: 17px;
+
+      flex: 1;
+
+      transition: 0.2s;
+    }
+
+    .side-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+    }
+
+    .side-category {
+      font-size: 11px;
+      color: #777;
+
+      margin-bottom: 6px;
+    }
+
+    .side-title {
+      font-size: 15px;
+      font-weight: 700;
+
+      line-height: 1.5;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+    }
+
+    /* =========================
+       SECTION
+    ========================= */
+
     .section-title {
-      border-left: 5px solid #e34b4b;
-      padding-left: 12px;
+      font-size: 22px;
+
+      margin-bottom: 16px;
+
+      font-weight: 800;
+    }
+
+    /* =========================
+       NEWS GRID
+    ========================= */
+
+    .news-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
     }
 
     .news-card {
-      background: white;
-      padding: 22px;
-      margin: 18px 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px #0000000b;
+      background: #fff;
+
+      border: 1px solid #e5e5e5;
+
+      border-radius: 12px;
+
+      padding: 19px;
+
+      transition: 0.2s;
+
+      min-width: 0;
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,0.07);
+    }
+
+    .news-meta {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 10px;
+
+      font-size: 11px;
+
+      color: #777;
     }
 
     .category {
-      color: #d94343;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .news-title {
+      font-size: 18px;
+
+      font-weight: 800;
+
+      line-height: 1.45;
+
+      margin-bottom: 9px;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
+    }
+
+    .news-summary {
       font-size: 13px;
-      font-weight: bold;
-    }
 
-    .news-card h3 {
-      margin: 10px 0;
-    }
+      color: #666;
 
-    .news-card p {
-      color: #596273;
       line-height: 1.7;
+
+      margin-bottom: 13px;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
     }
 
-    .meta {
-      font-size: 12px;
-      color: #8992a0;
+    .news-source {
+      font-size: 11px;
+
+      color: #888;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
     }
+
+    .read-more {
+      font-weight: 700;
+      color: #111;
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-overlay {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 2000;
+
+      background: rgba(0,0,0,0.45);
+
+      display: none;
+
+      align-items: flex-start;
+      justify-content: center;
+
+      padding: 80px 20px;
+    }
+
+    .search-overlay.show {
+      display: flex;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 650px;
+
+      background: #fff;
+
+      border-radius: 14px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .search-row {
+      display: flex;
+
+      gap: 10px;
+    }
+
+    .search-input {
+      flex: 1;
+
+      border: 1px solid #ccc;
+
+      border-radius: 8px;
+
+      padding: 12px 14px;
+
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #111;
+    }
+
+    .search-submit {
+      border: none;
+
+      background: #111;
+
+      color: #fff;
+
+      border-radius: 8px;
+
+      padding: 0 18px;
+
+      cursor: pointer;
+    }
+
+    .search-results {
+      margin-top: 20px;
+
+      max-height: 500px;
+
+      overflow-y: auto;
+    }
+
+    .search-result {
+      padding: 13px 0;
+
+      border-bottom: 1px solid #eee;
+    }
+
+    .search-result-title {
+      font-weight: 700;
+    }
+
+    .search-result-summary {
+      color: #777;
+
+      font-size: 13px;
+
+      margin-top: 4px;
+    }
+
+    .close-search {
+      margin-top: 14px;
+
+      border: none;
+
+      background: #eee;
+
+      padding: 8px 12px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
+      border-top: 1px solid #ddd;
+
+      background: #fff;
+
+      color: #888;
+
       text-align: center;
-      padding: 25px;
-      color: #77808e;
+
+      padding: 30px 20px;
+
+      font-size: 12px;
     }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      .featured {
+        grid-template-columns: 1fr;
+      }
+
+      .side-news {
+        display: grid;
+
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .news-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+        height: 58px;
+      }
+
+      .logo {
+        font-size: 19px;
+      }
+
+      .header-button {
+        padding: 7px 9px;
+      }
+
+      main {
+        padding: 20px 13px 50px;
+      }
+
+      .featured-main {
+        min-height: 300px;
+
+        padding: 23px;
+      }
+
+      .featured-title {
+        font-size: 24px;
+      }
+
+      .side-news {
+        grid-template-columns: 1fr;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .news-title {
+        font-size: 17px;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>NEWS HUB</h1>
-    <p>さまざまなニュースを、ここから。</p>
-  </header>
 
-  <nav>
-    <a href="#">トップ</a>
-    <a href="#society">社会</a>
-    <a href="#technology">テクノロジー</a>
-    <a href="#entertainment">エンタメ</a>
-    <a href="#sports">スポーツ</a>
-  </nav>
+<header>
 
-  <main>
-    <h2 class="section-title">新着ニュース</h2>
+  <div class="header-inner">
 
-    <article class="news-card" id="society">
-      <span class="category">社会</span>
-      <h3>ここにニュースの見出しが入ります</h3>
-      <p>ここにニュースの概要を掲載します。実際の記事を追加するときは、内容や出典を確認しましょう。</p>
-      <div class="meta">サンプル記事 ・ NEWS HUB</div>
-    </article>
+    <a href="#" class="logo">
+      NEWS<span>HUB</span>
+    </a>
 
-    <article class="news-card" id="technology">
-      <span class="category">テクノロジー</span>
-      <h3>新しい技術に関するニュース</h3>
-      <p>科学技術やインターネットなどの話題を掲載する場所です。</p>
-      <div class="meta">サンプル記事 ・ NEWS HUB</div>
-    </article>
+    <div class="header-actions">
 
-    <article class="news-card" id="entertainment">
-      <span class="category">エンタメ</span>
-      <h3>エンターテインメントの話題</h3>
-      <p>映画、音楽、ゲームなどの話題を掲載する場所です。</p>
-      <div class="meta">サンプル記事 ・ NEWS HUB</div>
-    </article>
+      <button
+        class="header-button"
+        id="searchButton"
+      >
+        🔍 検索
+      </button>
 
-    <article class="news-card" id="sports">
-      <span class="category">スポーツ</span>
-      <h3>スポーツに関するニュース</h3>
-      <p>スポーツの試合結果や選手に関する記事を掲載する場所です。</p>
-      <div class="meta">サンプル記事 ・ NEWS HUB</div>
-    </article>
-  </main>
+      <button
+        class="header-button"
+        id="refreshButton"
+      >
+        ↻ 更新
+      </button>
 
-  <footer>
-    NEWS HUB - ニュースサイト制作プロジェクト
-  </footer>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
- 
-  
-  // FirebaseコンソールのConfigをここに入れる
-  const firebaseConfig = {
-    // ここを自分のfirebaseConfigの内容に置き換える
-  };
+    </div>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-signInAnonymously(auth)
-  .catch((error) => {
+  </div>
+
+</header>
+
+
+<nav class="genre-nav">
+
+  <div
+    class="genre-nav-inner"
+    id="genreNav"
+  ></div>
+
+</nav>
+
+
+<main>
+
+  <div class="status">
+
+    <div id="statusText">
+      ニュースを読み込んでいます…
+    </div>
+
+    <div id="updateTime"></div>
+
+  </div>
+
+
+  <div
+    class="error"
+    id="errorBox"
+  ></div>
+
+
+  <div
+    class="loading"
+    id="loading"
+  >
+    ニュースを取得しています…
+  </div>
+
+
+  <section id="content">
+
+    <div
+      class="featured"
+      id="featured"
+    ></div>
+
+
+    <h2 class="section-title">
+      最新ニュース
+    </h2>
+
+
+    <div
+      class="news-grid"
+      id="newsGrid"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  NEWS HUB<br>
+  AIによって収集・整理されたニュースサイト
+
+</footer>
+
+
+<!-- SEARCH -->
+
+<div
+  class="search-overlay"
+  id="searchOverlay"
+>
+
+  <div class="search-box">
+
+    <div class="search-row">
+
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="ニュースを検索..."
+      >
+
+      <button
+        class="search-submit"
+        id="searchSubmit"
+      >
+        検索
+      </button>
+
+    </div>
+
+
+    <div
+      class="search-results"
+      id="searchResults"
+    ></div>
+
+
+    <button
+      class="close-search"
+      id="closeSearch"
+    >
+      閉じる
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /*
+   * ==========================================
+   * Cloudflare Worker のURL
+   * ==========================================
+   *
+   * 下のURLだけ、自分のWorker URLに変更してください。
+   *
+   * 例：
+   * https://news-api.xxxxx.workers.dev
+   *
+   */
+
+  const API_URL =
+    "https://YOUR-WORKER.workers.dev";
+
+
+  /*
+   * ==========================================
+   * ニュースジャンル
+   * ==========================================
+   */
+
+  const GENRES = [
+    "すべて",
+    "宇宙",
+    "科学",
+    "AI",
+    "テクノロジー",
+    "音楽",
+    "ゲーム",
+    "スポーツ",
+    "映画・アニメ"
+  ];
+
+
+  let currentGenre = "すべて";
+
+  let allNews = [];
+
+
+  /*
+   * ==========================================
+   * ジャンルボタン作成
+   * ==========================================
+   */
+
+  function createGenreButtons() {
+
+    const nav =
+      document.getElementById("genreNav");
+
+    nav.innerHTML = "";
+
+    GENRES.forEach(genre => {
+
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "genre-button";
+
+      if (genre === currentGenre) {
+        button.classList.add("active");
+      }
+
+      button.textContent = genre;
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          currentGenre = genre;
+
+          createGenreButtons();
+
+          loadNews();
+
+        }
+      );
+
+      nav.appendChild(button);
+
+    });
+
+  }
+
+
+  /*
+   * ==========================================
+   * ニュース取得
+   * ==========================================
+   */
+
+  async function loadNews() {
+
+    showLoading(true);
+
+    hideError();
+
+    document.getElementById(
+      "statusText"
+    ).textContent =
+      `${currentGenre}のニュースを取得しています…`;
+
+
+    try {
+
+      const url =
+        `${API_URL}/news?genre=${encodeURIComponent(currentGenre)}`;
+
+
+      const response =
+        await fetch(url);
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `サーバーエラー: ${response.status}`
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.news ||
+        !Array.isArray(data.news)
+      ) {
+
+        throw new Error(
+          "ニュースデータが正しくありません。"
+        );
+
+      }
+
+
+      allNews = data.news;
+
+
+      renderNews(allNews);
+
+
+      document.getElementById(
+        "statusText"
+      ).textContent =
+        `${currentGenre}のニュース ${allNews.length}件`;
+
+
+      if (data.createdAt) {
+
+        const date =
+          new Date(data.createdAt);
+
+        document.getElementById(
+          "updateTime"
+        ).textContent =
+          "取得: " +
+          date.toLocaleString("ja-JP");
+
+      }
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showError(
+        "ニュースを取得できませんでした。<br><br>" +
+        "Cloudflare WorkerのURL、APIキー、KV設定などを確認してください。"
+      );
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  }
+
+
+  /*
+   * ==========================================
+   * ニュース表示
+   * ==========================================
+   */
+
+  function renderNews(news) {
+
+    const featured =
+      document.getElementById("featured");
+
+    const grid =
+      document.getElementById("newsGrid");
+
+
+    featured.innerHTML = "";
+
+    grid.innerHTML = "";
+
+
+    if (!news.length) {
+
+      grid.innerHTML =
+        "<p>ニュースがありません。</p>";
+
+      return;
+
+    }
+
+
+    /*
+     * 1件目
+     */
+
+    const main =
+      news[0];
+
+
+    const mainLink =
+      safeUrl(main.url);
+
+
+    const featuredMain =
+      document.createElement("a");
+
+    featuredMain.className =
+      "featured-main";
+
+    featuredMain.href =
+      mainLink;
+
+    featuredMain.target =
+      "_blank";
+
+    featuredMain.rel =
+      "noopener noreferrer";
+
+
+    featuredMain.innerHTML = `
+
+      <div class="featured-content">
+
+        <div class="featured-label">
+          ${escapeHtml(main.category || currentGenre)}
+        </div>
+
+        <div class="featured-title">
+          ${escapeHtml(main.title)}
+        </div>
+
+        <div class="featured-summary">
+          ${escapeHtml(main.summary)}
+        </div>
+
+      </div>
+
+    `;
+
+
+    featured.appendChild(
+      featuredMain
+    );
+
+
+    /*
+     * 2〜4件目
+     */
+
+    const side =
+      document.createElement("div");
+
+    side.className =
+      "side-news";
+
+
+    news.slice(1, 4).forEach(item => {
+
+      const card =
+        document.createElement("a");
+
+      card.className =
+        "side-card";
+
+      card.href =
+        safeUrl(item.url);
+
+      card.target =
+        "_blank";
+
+      card.rel =
+        "noopener noreferrer";
+
+
+      card.innerHTML = `
+
+        <div class="side-category">
+          ${escapeHtml(item.category || "")}
+        </div>
+
+        <div class="side-title">
+          ${escapeHtml(item.title)}
+        </div>
+
+      `;
+
+
+      side.appendChild(card);
+
+    });
+
+
+    featured.appendChild(side);
+
+
+    /*
+     * 残りの記事
+     */
+
+    news.slice(4).forEach(item => {
+
+      const card =
+        document.createElement("a");
+
+      card.className =
+        "news-card";
+
+      card.href =
+        safeUrl(item.url);
+
+      card.target =
+        "_blank";
+
+      card.rel =
+        "noopener noreferrer";
+
+
+      card.innerHTML = `
+
+        <div class="news-meta">
+
+          <span class="category">
+            ${escapeHtml(item.category || "")}
+          </span>
+
+          <span>
+            ${escapeHtml(item.published || "")}
+          </span>
+
+        </div>
+
+        <div class="news-title">
+          ${escapeHtml(item.title)}
+        </div>
+
+        <div class="news-summary">
+          ${escapeHtml(item.summary)}
+        </div>
+
+        <div class="news-source">
+
+          <span>
+            ${escapeHtml(item.source || "")}
+          </span>
+
+          <span class="read-more">
+            詳細 →
+          </span>
+
+        </div>
+
+      `;
+
+
+      grid.appendChild(card);
+
+    });
+
+  }
+
+
+  /*
+   * ==========================================
+   * 検索
+   * ==========================================
+   */
+
+  function searchNews() {
+
+    const keyword =
+      document.getElementById(
+        "searchInput"
+      ).value
+      .trim()
+      .toLowerCase();
+
+
+    const results =
+      document.getElementById(
+        "searchResults"
+      );
+
+
+    if (!keyword) {
+
+      results.innerHTML =
+        "<p>検索ワードを入力してください。</p>";
+
+      return;
+
+    }
+
+
+    const matched =
+      allNews.filter(item => {
+
+        const text =
+          [
+            item.title,
+            item.summary,
+            item.category,
+            item.source
+          ]
+          .join(" ")
+          .toLowerCase();
+
+        return text.includes(keyword);
+
+      });
+
+
+    if (!matched.length) {
+
+      results.innerHTML =
+        "<p>該当するニュースがありません。</p>";
+
+      return;
+
+    }
+
+
+    results.innerHTML = "";
+
+
+    matched.forEach(item => {
+
+      const result =
+        document.createElement("a");
+
+      result.className =
+        "search-result";
+
+      result.href =
+        safeUrl(item.url);
+
+      result.target =
+        "_blank";
+
+      result.rel =
+        "noopener noreferrer";
+
+
+      result.innerHTML = `
+
+        <div class="search-result-title">
+          ${escapeHtml(item.title)}
+        </div>
+
+        <div class="search-result-summary">
+          ${escapeHtml(item.summary)}
+        </div>
+
+      `;
+
+
+      results.appendChild(result);
+
+    });
+
+  }
+
+
+  /*
+   * ==========================================
+   * URL安全処理
+   * ==========================================
+   */
+
+  function safeUrl(url) {
+
+    try {
+
+      const parsed =
+        new URL(url);
+
+      if (
+        parsed.protocol === "https:" ||
+        parsed.protocol === "http:"
+      ) {
+
+        return parsed.href;
+
+      }
+
+    } catch (e) {}
+
+    return "#";
+
+  }
+
+
+  /*
+   * ==========================================
+   * HTMLエスケープ
+   * ==========================================
+   */
+
+  function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+      return "";
+
+    }
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+
+  /*
+   * ==========================================
+   * Loading
+   * ==========================================
+   */
+
+  function showLoading(show) {
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+    loading.classList.toggle(
+      "show",
+      show
+    );
+
+  }
+
+
+  /*
+   * ==========================================
+   * Error
+   * ==========================================
+   */
+
+  function showError(message) {
+
+    const box =
+      document.getElementById(
+        "errorBox"
+      );
+
+    box.innerHTML =
+      message;
+
+    box.classList.add(
+      "show"
+    );
+
+  }
+
+
+  function hideError() {
+
+    document.getElementById(
+      "errorBox"
+    ).classList.remove(
+      "show"
+    );
+
+  }
+
+
+  /*
+   * ==========================================
+   * 検索ボタン
+   * ==========================================
+   */
+
+  document.getElementById(
+    "searchButton"
+  ).addEventListener(
+    "click",
+    () => {
+
+      document.getElementById(
+        "searchOverlay"
+      ).classList.add("show");
+
+      document.getElementById(
+        "searchInput"
+      ).focus();
+
+    }
+  );
+
+
+  document.getElementById(
+    "closeSearch"
+  ).addEventListener(
+    "click",
+    () => {
+
+      document.getElementById(
+        "searchOverlay"
+      ).classList.remove("show");
+
+    }
+  );
+
+
+  document.getElementById(
+    "searchSubmit"
+  ).addEventListener(
+    "click",
+    searchNews
+  );
+
+
+  document.getElementById(
+    "searchInput"
+  ).addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key === "Enter") {
+
+        searchNews();
+
+      }
+
+    }
+  );
+
+
+  /*
+   * ==========================================
+   * 更新
+   * ==========================================
+   */
+
+  document.getElementById(
+    "refreshButton"
+  ).addEventListener(
+    "click",
+    loadNews
+  );
+
+
+  /*
+   * ==========================================
+   * 起動
+   * ==========================================
+   */
+
+  createGenreButtons();
+
+  loadNews();
 
 </script>
+
 </body>
 </html>
+② Cloudflare側：worker.js
+
+Cloudflare Workersのコードを全部これに置き換えてください。
+
+今回は、勝手なジャンルをURLに入れて大量にAI検索されないように、ジャンルをホワイトリスト化しています。
+
+/*
+==================================================
+ NEWS HUB
+ Cloudflare Worker
+==================================================
+
+必要なCloudflare設定
+
+Secret:
+  GEMINI_API_KEY
+
+KV Binding:
+  NEWS_CACHE
+
+==================================================
+*/
+
+
+/*
+==================================================
+ 基本設定
+==================================================
+*/
+
+
+const CACHE_HOURS = 6;
+
+const MAX_NEWS = 30;
+
+
+/*
+ * Gemini APIで使用するモデル
+ *
+ * 現在のGoogle Gemini APIで利用できる
+ * Flash系モデルを指定
+ */
+
+const GEMINI_MODEL = "gemini-2.5-flash";
+
+
+/*
+==================================================
+ 許可するジャンル
+==================================================
+*/
+
+const ALLOWED_GENRES = [
+  "すべて",
+  "宇宙",
+  "科学",
+  "AI",
+  "テクノロジー",
+  "音楽",
+  "ゲーム",
+  "スポーツ",
+  "映画・アニメ"
+];
+
+
+/*
+==================================================
+ すべてのジャンル
+==================================================
+*/
+
+const ALL_GENRES = [
+  "宇宙",
+  "科学",
+  "AI",
+  "テクノロジー",
+  "音楽",
+  "ゲーム",
+  "スポーツ",
+  "映画・アニメ"
+];
+
+
+/*
+==================================================
+ CORS
+==================================================
+*/
+
+const CORS_HEADERS = {
+
+  "Access-Control-Allow-Origin": "*",
+
+  "Access-Control-Allow-Methods":
+    "GET, OPTIONS",
+
+  "Access-Control-Allow-Headers":
+    "Content-Type",
+
+  "Content-Type":
+    "application/json; charset=UTF-8"
+
+};
+
+
+/*
+==================================================
+ メイン
+==================================================
+*/
+
+export default {
+
+  async fetch(request, env) {
+
+    try {
+
+      /*
+       * OPTIONS
+       */
+
+      if (request.method === "OPTIONS") {
+
+        return new Response(
+          null,
+          {
+            status: 204,
+            headers: CORS_HEADERS
+          }
+        );
+
+      }
+
+
+      /*
+       * GET以外を拒否
+       */
+
+      if (request.method !== "GET") {
+
+        return jsonResponse(
+          {
+            error:
+              "GETリクエストのみ利用できます。"
+          },
+          405
+        );
+
+      }
+
+
+      /*
+       * URL取得
+       */
+
+      const url =
+        new URL(request.url);
+
+
+      /*
+       * /news 以外
+       */
+
+      if (url.pathname !== "/news") {
+
+        return jsonResponse(
+          {
+            message:
+              "NEWS HUB API",
+            endpoint:
+              "/news?genre=宇宙"
+          },
+          200
+        );
+
+      }
+
+
+      /*
+       * ジャンル取得
+       */
+
+      const genre =
+        url.searchParams.get("genre")
+        || "すべて";
+
+
+      /*
+       * 不正ジャンル防止
+       */
+
+      if (!ALLOWED_GENRES.includes(genre)) {
+
+        return jsonResponse(
+          {
+            error:
+              "指定されたジャンルは利用できません。"
+          },
+          400
+        );
+
+      }
+
+
+      /*
+       * APIキー確認
+       */
+
+      if (!env.GEMINI_API_KEY) {
+
+        return jsonResponse(
+          {
+            error:
+              "GEMINI_API_KEY がCloudflare Workerに設定されていません。"
+          },
+          500
+        );
+
+      }
+
+
+      /*
+       * KV確認
+       */
+
+      if (!env.NEWS_CACHE) {
+
+        return jsonResponse(
+          {
+            error:
+              "NEWS_CACHE がCloudflare Workerに接続されていません。"
+          },
+          500
+        );
+
+      }
+
+
+      /*
+       * KVのキー
+       */
+
+      const cacheKey =
+        "news:" +
+        encodeURIComponent(genre);
+
+
+      /*
+       * ==========================================
+       * KVから取得
+       * ==========================================
+       */
+
+      const cachedText =
+        await env.NEWS_CACHE.get(
+          cacheKey
+        );
+
+
+      if (cachedText) {
+
+        try {
+
+          const cached =
+            JSON.parse(cachedText);
+
+
+          /*
+           * 期限確認
+           */
+
+          const age =
+            Date.now() -
+            cached.createdAt;
+
+
+          const maxAge =
+            CACHE_HOURS *
+            60 *
+            60 *
+            1000;
+
+
+          if (
+            age < maxAge &&
+            Array.isArray(cached.news)
+          ) {
+
+            return jsonResponse(
+              {
+                news:
+                  cached.news,
+
+                cached:
+                  true,
+
+                createdAt:
+                  cached.createdAt,
+
+                genre:
+                  genre
+              },
+              200
+            );
+
+          }
+
+        } catch (error) {
+
+          /*
+           * 壊れたキャッシュなら
+           * AIから再取得
+           */
+
+          console.log(
+            "Cache parse error",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * ==========================================
+       * Geminiからニュース取得
+       * ==========================================
+       */
+
+      const news =
+        await fetchGeminiNews(
+          genre,
+          env.GEMINI_API_KEY
+        );
+
+
+      /*
+       * ==========================================
+       * KV保存
+       * ==========================================
+       */
+
+      const cacheData = {
+
+        news:
+          news,
+
+        createdAt:
+          Date.now(),
+
+        genre:
+          genre
+
+      };
+
+
+      await env.NEWS_CACHE.put(
+        cacheKey,
+        JSON.stringify(cacheData),
+        {
+          expirationTtl:
+            CACHE_HOURS * 60 * 60
+        }
+      );
+
+
+      /*
+       * ==========================================
+       * 結果返却
+       * ==========================================
+       */
+
+      return jsonResponse(
+        {
+          news:
+            news,
+
+          cached:
+            false,
+
+          createdAt:
+            cacheData.createdAt,
+
+          genre:
+            genre
+        },
+        200
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Worker error:",
+        error
+      );
+
+
+      return jsonResponse(
+        {
+          error:
+            "ニュース取得中にエラーが発生しました。",
+
+          detail:
+            String(error?.message || error)
+        },
+        500
+      );
+
+    }
+
+  }
+
+};
+
+
+/*
+==================================================
+ Geminiニュース取得
+==================================================
+*/
+
+async function fetchGeminiNews(
+  genre,
+  apiKey
+) {
+
+
+  /*
+   * 検索するジャンル
+   */
+
+  const targetGenres =
+    genre === "すべて"
+      ? ALL_GENRES
+      : [genre];
+
+
+  /*
+   * プロンプト
+   */
+
+  const prompt = `
+
+あなたはニュース情報を整理するAIです。
+
+現在の最新情報をGoogle検索で調査してください。
+
+今回調査するジャンル：
+
+${targetGenres.join("、")}
+
+
+【重要な条件】
+
+・できるだけ新しいニュースを探してください。
+・現在起きているニュースを優先してください。
+・信頼できるニュース媒体や公式情報を優先してください。
+・実在しないニュースを作らないでください。
+・URLを捏造しないでください。
+・同じニュースを重複させないでください。
+・記事本文を長くコピーしないでください。
+・要約は日本語で簡潔にしてください。
+・タイトルも日本語にしてください。
+・政治・選挙に関するニュースは、立場を誘導せず中立的に扱ってください。
+・政治的な候補者、政党、政策について「おすすめ」「最良」などの評価をしないでください。
+・可能な場合は記事の公開日を記載してください。
+
+
+【件数】
+
+合計最大30件。
+
+
+【ジャンル】
+
+各ニュースについて適切なジャンルを付けてください。
+
+
+【出力】
+
+必ずJSON配列だけを返してください。
+
+Markdownのコードブロックは使わないでください。
+
+形式：
+
+[
+  {
+    "title": "ニュースタイトル",
+    "summary": "ニュースの簡潔な日本語要約",
+    "category": "ジャンル",
+    "source": "情報源の名前",
+    "url": "記事のURL",
+    "published": "公開日または不明",
+    "importance": 1
+  }
+]
+
+importanceは、
+
+1 = 特に重要
+2 = 重要
+3 = 通常
+
+としてください。
+
+ニュースとして確認できない情報は含めないでください。
+
+`;
+
+
+  /*
+   * Gemini API URL
+   */
+
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+
+  /*
+   * Gemini APIリクエスト
+   */
+
+  const response =
+    await fetch(
+      endpoint,
+      {
+        method: "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json",
+
+          "x-goog-api-key":
+            apiKey
+
+        },
+
+        body: JSON.stringify({
+
+          contents: [
+
+            {
+              role: "user",
+
+              parts: [
+
+                {
+                  text:
+                    prompt
+                }
+
+              ]
+
+            }
+
+          ],
+
+
+          /*
+           * Google検索を使用
+           */
+
+          tools: [
+
+            {
+              google_search: {}
+            }
+
+          ],
+
+
+          /*
+           * 出力設定
+           */
+
+          generationConfig: {
+
+            temperature:
+              0.2,
+
+            responseMimeType:
+              "application/json"
+
+          }
+
+        })
+
+      }
+    );
+
+
+  /*
+   * APIエラー
+   */
+
+  if (!response.ok) {
+
+    const errorText =
+      await response.text();
+
+    console.error(
+      "Gemini API error:",
+      errorText
+    );
+
+
+    throw new Error(
+      `Gemini API Error ${response.status}: ${errorText}`
+    );
+
+  }
+
+
+  /*
+   * JSON取得
+   */
+
+  const data =
+    await response.json();
+
+
+  /*
+   * テキストを取り出す
+   */
+
+  const parts =
+    data?.candidates?.[0]?.content?.parts
+    || [];
+
+
+  const text =
+    parts
+      .map(part => part.text || "")
+      .join("")
+      .trim();
+
+
+  if (!text) {
+
+    throw new Error(
+      "Geminiからニュースデータが返されませんでした。"
+    );
+
+  }
+
+
+  /*
+   * JSON解析
+   */
+
+  let news;
+
+  try {
+
+    news =
+      JSON.parse(text);
+
+  } catch (error) {
+
+    console.error(
+      "JSON parse error:",
+      text
+    );
+
+    throw new Error(
+      "Geminiの返答をJSONとして解析できませんでした。"
+    );
+
+  }
+
+
+  /*
+   * 配列確認
+   */
+
+  if (!Array.isArray(news)) {
+
+    throw new Error(
+      "Geminiから返されたニュースデータが配列ではありません。"
+    );
+
+  }
+
+
+  /*
+   * データ整理
+   */
+
+  news =
+    news
+      .map(item => {
+
+        return {
+
+          title:
+            cleanText(item.title),
+
+          summary:
+            cleanText(item.summary),
+
+          category:
+            cleanText(item.category),
+
+          source:
+            cleanText(item.source),
+
+          url:
+            cleanUrl(item.url),
+
+          published:
+            cleanText(item.published),
+
+          importance:
+            normalizeImportance(
+              item.importance
+            )
+
+        };
+
+      })
+      .filter(item => {
+
+        return (
+          item.title &&
+          item.summary &&
+          item.url
+        );
+
+      });
+
+
+  /*
+   * URLが正しい記事だけ
+   */
+
+  news =
+    news.filter(item => {
+
+      return isValidHttpUrl(
+        item.url
+      );
+
+    });
+
+
+  /*
+   * 重複削除
+   */
+
+  news =
+    removeDuplicates(news);
+
+
+  /*
+   * 重要度順
+   */
+
+  news.sort(
+    (a, b) =>
+      a.importance -
+      b.importance
+  );
+
+
+  /*
+   * 最大件数
+   */
+
+  news =
+    news.slice(
+      0,
+      MAX_NEWS
+    );
+
+
+  return news;
+
+}
+
+
+/*
+==================================================
+ テキスト整理
+==================================================
+*/
+
+function cleanText(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 1000);
+
+}
+
+
+/*
+==================================================
+ URL整理
+==================================================
+*/
+
+function cleanUrl(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .trim()
+    .replace(/^["']|["']$/g, "");
+
+}
+
+
+/*
+==================================================
+ URL確認
+==================================================
+*/
+
+function isValidHttpUrl(url) {
+
+  try {
+
+    const parsed =
+      new URL(url);
+
+
+    return (
+      parsed.protocol === "https:" ||
+      parsed.protocol === "http:"
+    );
+
+  } catch (error) {
+
+    return false;
+
+  }
+
+}
+
+
+/*
+==================================================
+ importance
+==================================================
+*/
+
+function normalizeImportance(value) {
+
+  const number =
+    Number(value);
+
+
+  if (
+    number === 1 ||
+    number === 2 ||
+    number === 3
+  ) {
+
+    return number;
+
+  }
+
+
+  return 3;
+
+}
+
+
+/*
+==================================================
+ 重複削除
+==================================================
+*/
+
+function removeDuplicates(news) {
+
+  const seen =
+    new Set();
+
+  const result = [];
+
+
+  for (const item of news) {
+
+    const key =
+      (
+        item.url ||
+        item.title
+      )
+      .toLowerCase()
+      .trim();
+
+
+    if (seen.has(key)) {
+
+      continue;
+
+    }
+
+
+    seen.add(key);
+
+    result.push(item);
+
+  }
+
+
+  return result;
+
+}
+
+
+/*
+==================================================
+ JSON Response
+==================================================
+*/
+
+function jsonResponse(
+  data,
+  status = 200
+) {
+
+  return new Response(
+    JSON.stringify(
+      data,
+      null,
+      2
+    ),
+    {
+      status,
+      headers:
+        CORS_HEADERS
+    }
+  );
+
+}
+③ Cloudflareでコード以外に設定するもの
+
+ここだけはコードに書きません。
+
+Worker → Settings → Variables and Secrets
+
+に、
+
+GEMINI_API_KEY
+
+という名前のSecretを作って、そこに自分のGemini APIキーを入力してください。Secretは暗号化された値としてWorkerから env.GEMINI_API_KEY で利用できます。
+
+次にKVを作って、
+
+KV Namespace:
+NEWS_CACHE
+
+をWorkerのBindingとして、
+
+Variable name:
+NEWS_CACHE
+
+にしてください。KVはニュースのキャッシュ保存に使います。
+
+④ 最後にGitHub側で1か所だけ変更
+
+index.html のこの部分：
+
+const API_URL =
+  "https://YOUR-WORKER.workers.dev";
+
+を、実際のCloudflare Worker URLに変更します。
+
+例えばWorkerのURLが
+
+https://news-api-abc123.workers.dev
+
+なら、
+
+const API_URL =
+  "https://news-api-abc123.workers.dev";
+
+です。
+
+Gemini APIキーはGitHubのコードには絶対に書かないでください。 GitHub PagesのHTMLは誰でも見られるためです。Cloudflare側のSecretに置く構成にしています。
+
+これで構造は、
+
+あなたのサイト
+    ↓
+GitHub Pages
+    ↓
+Cloudflare Worker
+    ↓
+Cloudflare KV
+    ↓
+（キャッシュがなければ）
+    ↓
+Gemini API
+    ↓
+Google検索
+    ↓
+最新ニュース
+
+になります。
+
+なお、Cloudflare KVの期限付き保存には expirationTtl が使えるため、今回の「6時間ごとにニュースを更新する」仕組みにしています。
+
+次は、Cloudflare側の「Worker作成 → Secret → KV → コード貼り付け」の順番を、画面を見ながら1個ずつ進めればOKです。
