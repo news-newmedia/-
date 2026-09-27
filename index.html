@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NEWS HUB</title>
+<title>メロディア</title>
 
 <style>
 
@@ -920,7 +920,7 @@ main {
 <div
   class="logo"
   onclick="loadNews()">
-  NEWS HUB
+  メロディア
 </div>
 
 
@@ -977,7 +977,7 @@ main {
 <section class="hero">
 
 <h1>
-NEWS HUB
+メロディア
 </h1>
 
 <p>
@@ -1791,12 +1791,6 @@ async function loadTopics() {
     );
 
 
-    /*
-       APIから取得できなかった場合は
-       現在のサイトで使っていた
-       デフォルトのトピックを使用します。
-    */
-
     topics = [
       "国内",
       "社会",
@@ -1841,21 +1835,12 @@ function renderTopicNav() {
   }
 
 
-  /*
-     トップは固定
-  */
-
   let html = `
     <button onclick="loadNews()">
       トップ
     </button>
   `;
 
-
-  /*
-     Cloudflare KVに保存されている
-     トピックを追加
-  */
 
   topics.forEach(
     topic => {
@@ -1898,10 +1883,6 @@ function renderGenreSelect() {
   }
 
 
-  /*
-     現在選択されている値を保存
-  */
-
   const oldValue =
     select.value;
 
@@ -1922,11 +1903,6 @@ function renderGenreSelect() {
   );
 
 
-  /*
-     トピックが一つもない場合でも
-     その他を選べるようにする
-  */
-
   if (!topics.length) {
 
     html = `
@@ -1938,12 +1914,6 @@ function renderGenreSelect() {
   }
 
 
-  /*
-     既存ニュースなどに
-     「その他」が残っている場合のため
-     その他も残します。
-  */
-
   html += `
     <option value="その他">
       その他
@@ -1954,11 +1924,6 @@ function renderGenreSelect() {
   select.innerHTML =
     html;
 
-
-  /*
-     前回の値がまだ存在する場合は
-     その値を維持
-  */
 
   const exists =
     Array.from(
@@ -2066,10 +2031,6 @@ async function authenticateAdmin() {
 
     }
 
-
-    /*
-       認証成功
-    */
 
     adminToken =
       token;
@@ -2272,10 +2233,6 @@ function addTopic() {
   }
 
 
-  /*
-     同じ名前のトピックを防止
-  */
-
   const exists =
     editingTopics.some(
       topic =>
@@ -2441,10 +2398,6 @@ async function saveTopics() {
   }
 
 
-  /*
-     入力値を整理
-  */
-
   const cleaned =
     editingTopics
       .map(
@@ -2467,10 +2420,6 @@ async function saveTopics() {
 
   }
 
-
-  /*
-     重複削除
-  */
 
   const unique =
     [];
@@ -2549,10 +2498,6 @@ async function saveTopics() {
       !data.success
     ) {
 
-      /*
-         トークンが無効になった場合
-      */
-
       if (
         response.status === 401
       ) {
@@ -2585,10 +2530,6 @@ async function saveTopics() {
 
     }
 
-
-    /*
-       サイト側のトピックも更新
-    */
 
     topics =
       Array.isArray(data.topics)
@@ -3821,11 +3762,6 @@ function openAdmin() {
     "block";
 
 
-  /*
-     すでに認証済みなら
-     そのまま管理者パネルを表示
-  */
-
   if (adminToken) {
 
     document.getElementById(
@@ -3866,10 +3802,6 @@ function openAdmin() {
 ========================= */
 
 async function createNews() {
-
-  /*
-     管理者認証済みのトークンを使用
-  */
 
   if (!adminToken) {
 
@@ -3967,10 +3899,6 @@ async function createNews() {
 
     if (!data.success) {
 
-      /*
-         認証切れ
-      */
-
       if (
         response.status === 401
       ) {
@@ -4009,10 +3937,6 @@ async function createNews() {
     );
 
 
-    /*
-       ニュース入力欄をクリア
-    */
-
     document.getElementById(
       "newsTitle"
     ).value = "";
@@ -4032,10 +3956,6 @@ async function createNews() {
       "newsImage"
     ).value = "";
 
-
-    /*
-       投稿後は最新ニュースへ
-    */
 
     await loadNews();
 
@@ -4211,10 +4131,6 @@ async function init() {
   await loadUser();
 
 
-  /*
-     トピックを最初に取得
-  */
-
   await loadTopics();
 
 
@@ -4247,10 +4163,6 @@ async function init() {
 
   }
 
-
-  /*
-     ニュースを読み込む
-  */
 
   await loadNews();
 
