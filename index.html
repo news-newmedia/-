@@ -6,35 +6,10 @@
 
 <title>NEWS HUB</title>
 
-<meta
-  name="description"
-  content="NEWS HUB - 国内外のニュースをジャンル別に見るニュースサイト"
-/>
-
 <style>
-/* =========================================================
-   基本設定
-========================================================= */
-
-:root {
-  --bg: #f5f6f8;
-  --surface: #ffffff;
-  --surface-2: #f0f2f5;
-  --text: #111318;
-  --sub: #68707d;
-  --border: #e2e5e9;
-  --accent: #e60023;
-  --accent-dark: #b9001c;
-  --shadow: 0 8px 30px rgba(0,0,0,.07);
-  --radius: 14px;
-}
 
 * {
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {
@@ -42,17 +17,16 @@ body {
   font-family:
     -apple-system,
     BlinkMacSystemFont,
-    "Noto Sans JP",
-    "Yu Gothic",
-    "Hiragino Kaku Gothic ProN",
+    "Segoe UI",
     sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  background: #f5f6f8;
+  color: #111;
 }
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
 }
 
@@ -60,685 +34,320 @@ button {
   cursor: pointer;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-
-/* =========================================================
-   ヘッダー
-========================================================= */
-
-.site-header {
+header {
+  background: #111;
+  color: white;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  background: rgba(255,255,255,.96);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  z-index: 100;
 }
 
 .header-inner {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: auto;
-  height: 68px;
-  padding: 0 20px;
+  padding: 15px 20px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .logo {
   font-size: 25px;
-  font-weight: 900;
-  letter-spacing: -.7px;
+  font-weight: 800;
+  cursor: pointer;
   white-space: nowrap;
 }
 
-.logo span {
-  color: var(--accent);
-}
-
-.search-box {
+.search {
   flex: 1;
-  max-width: 520px;
-  position: relative;
 }
 
-.search-box input {
+.search input {
   width: 100%;
-  height: 42px;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  border-radius: 22px;
-  padding: 0 45px 0 18px;
+  padding: 11px 15px;
+  border-radius: 8px;
+  border: none;
   outline: none;
 }
 
-.search-box input:focus {
-  border-color: #aeb4bd;
-  background: white;
-}
-
-.search-button {
-  position: absolute;
-  right: 5px;
-  top: 4px;
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  font-size: 18px;
-}
-
-.header-actions {
-  margin-left: auto;
+.header-buttons {
   display: flex;
   gap: 8px;
 }
 
-.icon-button {
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--border);
+.header-buttons button {
+  border: none;
+  background: #333;
+  color: white;
+  padding: 10px 13px;
+  border-radius: 8px;
+}
+
+nav {
   background: white;
-  border-radius: 50%;
-  font-size: 18px;
-}
-
-.icon-button:hover {
-  background: var(--surface-2);
-}
-
-
-/* =========================================================
-   カテゴリーナビ
-========================================================= */
-
-.category-bar {
-  background: white;
-  border-bottom: 1px solid var(--border);
-}
-
-.category-inner {
-  max-width: 1240px;
-  margin: auto;
-  padding: 0 20px;
-  display: flex;
-  gap: 5px;
+  border-bottom: 1px solid #ddd;
   overflow-x: auto;
-  scrollbar-width: none;
 }
 
-.category-inner::-webkit-scrollbar {
-  display: none;
+.nav-inner {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
 }
 
-.category-button {
-  flex: 0 0 auto;
+.nav-inner button {
   border: none;
   background: transparent;
-  padding: 14px 13px;
-  color: #4f5661;
-  font-weight: 700;
-  font-size: 14px;
-  border-bottom: 3px solid transparent;
+  padding: 14px 16px;
+  white-space: nowrap;
 }
 
-.category-button:hover {
-  color: var(--accent);
+.nav-inner button:hover {
+  background: #f0f0f0;
 }
 
-.category-button.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-
-/* =========================================================
-   メイン
-========================================================= */
-
-.main {
-  max-width: 1240px;
+main {
+  max-width: 1200px;
   margin: auto;
-  padding: 30px 20px 100px;
+  padding: 25px 20px 100px;
 }
 
-
-/* =========================================================
-   ページ見出し
-========================================================= */
-
-.page-heading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.page-heading h1 {
-  margin: 0;
-  font-size: 28px;
-  letter-spacing: -.8px;
-}
-
-.page-heading p {
-  margin: 6px 0 0;
-  color: var(--sub);
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   注目ニュース
-========================================================= */
-
-.featured-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 18px;
-  margin-bottom: 42px;
-}
-
-.feature-main {
-  min-height: 330px;
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-  background: #20242a;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-}
-
-.feature-main img {
-  width: 100%;
-  height: 100%;
-  min-height: 330px;
-  object-fit: cover;
-  opacity: .78;
-}
-
-.feature-overlay {
-  position: absolute;
-  inset: 0;
-  padding: 26px;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  background: linear-gradient(
-    transparent 25%,
-    rgba(0,0,0,.82)
-  );
+.hero {
+  background: #111;
   color: white;
+  border-radius: 14px;
+  padding: 30px;
+  margin-bottom: 25px;
 }
 
-.feature-category {
-  font-size: 12px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: #ffcad2;
-}
-
-.feature-title {
-  font-size: 28px;
-  line-height: 1.35;
-  font-weight: 900;
-  margin: 0;
-}
-
-.feature-date {
-  margin-top: 10px;
-  font-size: 12px;
-  opacity: .75;
-}
-
-.feature-side {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.side-card {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-}
-
-.side-card:last-child {
-  border-bottom: none;
-}
-
-.side-card img {
-  width: 110px;
-  height: 82px;
-  object-fit: cover;
-  border-radius: 9px;
-  background: #ddd;
-}
-
-.side-card-title {
-  font-size: 14px;
-  line-height: 1.45;
-  font-weight: 800;
-}
-
-.side-card-meta {
-  margin-top: 7px;
-  color: var(--sub);
-  font-size: 11px;
-}
-
-
-/* =========================================================
-   コンテンツレイアウト
-========================================================= */
-
-.content-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 310px;
-  gap: 35px;
+.hero h1 {
+  margin-top: 0;
 }
 
 .section-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 17px;
-  font-size: 21px;
-  font-weight: 900;
+  margin: 25px 0 15px;
 }
 
-.section-title::before {
-  content: "";
-  width: 5px;
-  height: 22px;
-  border-radius: 3px;
-  background: var(--accent);
-}
-
-
-/* =========================================================
-   ニュース一覧
-========================================================= */
-
-.news-list {
-  display: flex;
-  flex-direction: column;
+.news-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 18px;
 }
 
 .news-card {
-  display: grid;
-  grid-template-columns: 210px minmax(0,1fr);
-  gap: 18px;
-  padding: 17px 0;
-  border-bottom: 1px solid var(--border);
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.06);
   cursor: pointer;
 }
 
-.news-card:first-child {
-  border-top: 1px solid var(--border);
-}
-
-.news-card:hover .news-title {
-  color: var(--accent);
-}
-
-.news-image {
-  width: 210px;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 10px;
+.news-card-image {
+  height: 170px;
   background: #ddd;
-}
-
-.news-content {
-  min-width: 0;
-}
-
-.news-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--sub);
-  font-size: 11px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.news-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-card-content {
+  padding: 17px;
+}
+
+.genre {
+  display: inline-block;
+  font-size: 12px;
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 5px;
   margin-bottom: 8px;
 }
 
-.news-category {
-  color: var(--accent);
-  font-weight: 800;
+.news-card h3 {
+  margin: 4px 0 8px;
+  font-size: 18px;
 }
 
-.news-title {
-  margin: 0;
-  font-size: 19px;
-  line-height: 1.4;
-  font-weight: 900;
-  transition: color .15s;
+.news-card p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.news-summary {
-  margin: 8px 0 0;
-  color: #5e6570;
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-
-/* =========================================================
-   サイドバー
-========================================================= */
-
-.sidebar-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 19px;
-  margin-bottom: 18px;
-}
-
-.sidebar-card h3 {
-  margin: 0 0 15px;
-  font-size: 16px;
-}
-
-.genre-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.genre-chip {
-  border: 1px solid var(--border);
-  background: white;
-  padding: 8px 11px;
-  border-radius: 20px;
+.news-date {
+  color: #999;
   font-size: 12px;
-  font-weight: 700;
 }
-
-.genre-chip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.about-text {
-  color: var(--sub);
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-
-/* =========================================================
-   空状態
-========================================================= */
 
 .empty {
-  padding: 60px 20px;
-  text-align: center;
-  color: var(--sub);
-  border: 1px dashed #cdd1d6;
-  border-radius: 12px;
   background: white;
-}
-
-.loading {
-  padding: 60px;
+  padding: 30px;
+  border-radius: 10px;
   text-align: center;
-  color: var(--sub);
+  color: #777;
 }
-
-
-/* =========================================================
-   エラー
-========================================================= */
-
-.error-box {
-  padding: 18px;
-  background: #fff0f2;
-  border: 1px solid #ffc6ce;
-  color: #a40019;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  display: none;
-}
-
-
-/* =========================================================
-   モーダル
-========================================================= */
 
 .modal {
+  display: none;
   position: fixed;
   inset: 0;
-  z-index: 3000;
   background: rgba(0,0,0,.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-box {
-  width: min(760px, 100%);
-  max-height: 90vh;
+  z-index: 500;
   overflow-y: auto;
+  padding: 30px 15px;
+}
+
+.modal-content {
   background: white;
-  border-radius: 18px;
-  box-shadow: 0 20px 70px rgba(0,0,0,.25);
+  max-width: 750px;
+  margin: auto;
+  border-radius: 14px;
+  padding: 25px;
 }
 
 .modal-header {
-  position: sticky;
-  top: 0;
-  z-index: 2;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: white;
-  border-bottom: 1px solid var(--border);
-  padding: 16px 20px;
+  gap: 15px;
 }
 
-.modal-header h2 {
-  margin: 0;
-  font-size: 17px;
-}
-
-.close-button {
-  width: 36px;
-  height: 36px;
+.close {
   border: none;
-  background: var(--surface-2);
+  background: #eee;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  font-size: 20px;
 }
 
-.modal-body {
-  padding: 22px;
-}
-
-
-/* =========================================================
-   記事詳細
-========================================================= */
-
-.article-image {
-  width: 100%;
-  max-height: 390px;
-  object-fit: cover;
-  border-radius: 12px;
-  background: #ddd;
-}
-
-.article-category {
-  display: inline-block;
-  margin-top: 18px;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.article-title {
-  margin: 7px 0 8px;
-  font-size: 29px;
-  line-height: 1.4;
-}
-
-.article-date {
-  color: var(--sub);
-  font-size: 12px;
-}
-
-.article-summary {
-  margin-top: 22px;
-  padding-top: 22px;
-  border-top: 1px solid var(--border);
+.article-body {
   line-height: 1.9;
-  font-size: 15px;
-}
-
-.article-source {
+  white-space: pre-wrap;
   margin-top: 20px;
-  color: var(--sub);
-  font-size: 12px;
 }
 
+.comment {
+  border-top: 1px solid #eee;
+  padding: 15px 0;
+}
 
-/* =========================================================
-   コメント
-========================================================= */
+.comment-name {
+  font-weight: bold;
+  cursor: pointer;
+}
 
-.comments-section {
-  margin-top: 35px;
+.comment-text {
+  margin-top: 5px;
 }
 
 .comment-form {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
-}
-
-.comment-form textarea {
-  flex: 1;
-  min-height: 60px;
-  resize: vertical;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 11px;
-  outline: none;
-}
-
-.comment-form textarea:focus {
-  border-color: #999;
-}
-
-.primary-button {
-  border: none;
-  background: var(--accent);
-  color: white;
-  padding: 10px 17px;
-  border-radius: 9px;
-  font-weight: 800;
-}
-
-.primary-button:hover {
-  background: var(--accent-dark);
-}
-
-.comment {
-  padding: 13px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.comment-user {
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.comment-date {
-  margin-left: 8px;
-  color: var(--sub);
-  font-size: 10px;
-}
-
-.comment-text {
-  margin-top: 6px;
-  line-height: 1.6;
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   フォロー
-========================================================= */
-
-.follow-button {
   margin-top: 15px;
-  border: 1px solid var(--border);
-  background: white;
-  padding: 10px 18px;
-  border-radius: 20px;
-  font-weight: 800;
 }
 
-.follow-button.following {
-  background: #111318;
+.comment-form input {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+
+.primary {
+  background: #111;
   color: white;
-  border-color: #111318;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 15px;
 }
 
+.secondary {
+  background: #eee;
+  color: #111;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 15px;
+}
 
-/* =========================================================
-   ユーザー画面
-========================================================= */
+.profile {
+  text-align: center;
+}
 
-.profile-info {
-  background: var(--surface-2);
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 20px;
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #222;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto 20px;
+  font-size: 35px;
+}
+
+.profile-name {
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .user-id {
+  color: #888;
+  font-size: 13px;
+  margin: 8px;
   word-break: break-all;
-  font-family: monospace;
-  font-size: 12px;
-  color: var(--sub);
 }
 
-
-/* =========================================================
-   チャット
-========================================================= */
-
-.chat-window {
+.profile-actions {
+  margin-top: 20px;
   display: flex;
-  flex-direction: column;
-  height: 500px;
+  justify-content: center;
+  gap: 10px;
 }
 
-.chat-messages {
-  flex: 1;
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+
+.form-group textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.chat-list {
+  max-height: 450px;
   overflow-y: auto;
-  padding: 12px;
-  background: #f3f4f6;
-  border-radius: 12px;
+  padding: 10px;
+  background: #f3f3f3;
+  border-radius: 10px;
 }
 
 .chat-message {
-  display: flex;
   margin: 8px 0;
+  display: flex;
 }
 
 .chat-message.mine {
@@ -747,23 +356,19 @@ a {
 
 .chat-bubble {
   max-width: 75%;
-  padding: 10px 13px;
-  border-radius: 15px;
+  padding: 9px 13px;
+  border-radius: 12px;
   background: white;
-  box-shadow: 0 1px 4px rgba(0,0,0,.06);
-  font-size: 13px;
-  line-height: 1.5;
 }
 
 .chat-message.mine .chat-bubble {
-  background: #111318;
+  background: #111;
   color: white;
 }
 
-.chat-time {
-  margin-top: 4px;
-  font-size: 9px;
-  color: var(--sub);
+.chat-name {
+  font-size: 11px;
+  opacity: .7;
 }
 
 .chat-input {
@@ -774,1094 +379,714 @@ a {
 
 .chat-input input {
   flex: 1;
-  height: 43px;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 0 15px;
-  outline: none;
-}
-
-.chat-input button {
-  border: none;
-  background: var(--accent);
-  color: white;
-  border-radius: 22px;
-  padding: 0 18px;
-  font-weight: 800;
-}
-
-
-/* =========================================================
-   検索結果
-========================================================= */
-
-.search-info {
-  display: none;
-  margin-bottom: 18px;
-  padding: 13px 16px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-}
-
-.search-info strong {
-  color: var(--accent);
-}
-
-
-/* =========================================================
-   管理画面
-========================================================= */
-
-.admin-form {
-  display: grid;
-  gap: 12px;
-}
-
-.admin-form input,
-.admin-form textarea,
-.admin-form select {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 9px;
   padding: 11px;
-  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-.admin-form textarea {
-  min-height: 120px;
-  resize: vertical;
+.follow-list {
+  margin-top: 20px;
 }
 
-.admin-status {
+.follow-user {
   padding: 12px;
-  border-radius: 9px;
-  background: var(--surface-2);
-  font-size: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
 }
 
-
-/* =========================================================
-   フッター
-========================================================= */
-
-footer {
-  border-top: 1px solid var(--border);
-  background: white;
-  padding: 35px 20px 100px;
-  text-align: center;
-}
-
-.footer-logo {
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.footer-logo span {
-  color: var(--accent);
-}
-
-.footer-text {
-  color: var(--sub);
-  font-size: 11px;
-  margin-top: 10px;
-}
-
-
-/* =========================================================
-   スマホ下部ナビ
-========================================================= */
-
-.mobile-nav {
+.bottom-nav {
   display: none;
 }
 
+@media (max-width: 800px) {
 
-/* =========================================================
-   レスポンシブ
-========================================================= */
-
-@media (max-width: 850px) {
+  .news-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
 
   .header-inner {
-    height: 60px;
-    padding: 0 12px;
-    gap: 10px;
+    flex-wrap: wrap;
   }
 
-  .logo {
-    font-size: 21px;
+  .search {
+    order: 3;
+    width: 100%;
+    flex-basis: 100%;
   }
+}
 
-  .search-box {
-    max-width: none;
-  }
+@media (max-width: 600px) {
 
-  .header-actions {
-    display: none;
-  }
-
-  .main {
-    padding: 20px 12px 100px;
-  }
-
-  .featured-grid {
+  .news-grid {
     grid-template-columns: 1fr;
   }
 
-  .feature-main {
-    min-height: 270px;
+  .header-buttons button {
+    font-size: 12px;
   }
 
-  .feature-main img {
-    min-height: 270px;
-  }
-
-  .feature-title {
-    font-size: 22px;
-  }
-
-  .content-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .news-card {
-    grid-template-columns: 115px minmax(0,1fr);
-    gap: 12px;
-  }
-
-  .news-image {
-    width: 115px;
-    height: 82px;
-  }
-
-  .news-title {
-    font-size: 15px;
-  }
-
-  .news-summary {
-    display: none;
-  }
-
-  .news-meta {
-    margin-bottom: 5px;
-  }
-
-  .article-title {
-    font-size: 22px;
-  }
-
-  .mobile-nav {
+  .bottom-nav {
     position: fixed;
+    bottom: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    z-index: 2000;
-    height: 62px;
-    background: rgba(255,255,255,.97);
-    border-top: 1px solid var(--border);
+    height: 60px;
+    background: white;
+    border-top: 1px solid #ddd;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    backdrop-filter: blur(10px);
+    z-index: 200;
   }
 
-  .mobile-nav button {
+  .bottom-nav button {
+    flex: 1;
     border: none;
-    background: transparent;
-    color: #5e6570;
-    font-size: 11px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    align-items: center;
-  }
-
-  .mobile-nav .nav-icon {
-    font-size: 19px;
-  }
-
-  .mobile-nav button.active {
-    color: var(--accent);
-    font-weight: 900;
-  }
-
-  .comment-form {
-    flex-direction: column;
-  }
-
-  .comment-form button {
-    width: 100%;
+    background: white;
   }
 }
 
-
-@media (max-width: 480px) {
-
-  .category-button {
-    padding: 12px 10px;
-    font-size: 13px;
-  }
-
-  .side-card {
-    grid-template-columns: 90px 1fr;
-  }
-
-  .side-card img {
-    width: 90px;
-    height: 70px;
-  }
-
-  .feature-overlay {
-    padding: 18px;
-  }
-
-  .feature-title {
-    font-size: 19px;
-  }
-
-  .modal {
-    padding: 0;
-    align-items: end;
-  }
-
-  .modal-box {
-    width: 100%;
-    max-height: 94vh;
-    border-radius: 18px 18px 0 0;
-  }
-}
 </style>
 </head>
 
-
 <body>
 
-<!-- =========================================================
-     ヘッダー
-========================================================= -->
+<header>
 
-<header class="site-header">
+<div class="header-inner">
 
-  <div class="header-inner">
+<div
+  class="logo"
+  onclick="loadNews()">
+  NEWS HUB
+</div>
 
-    <a href="#" class="logo" onclick="goHome(); return false;">
-      NEWS <span>HUB</span>
-    </a>
+<div class="search">
+<input
+  id="searchInput"
+  placeholder="ニュースを検索..."
+  oninput="searchNews()">
+</div>
 
-    <div class="search-box">
+<div class="header-buttons">
 
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="ニュースを検索"
-        autocomplete="off"
-      >
+<button onclick="openMyPage()">
+👤
+</button>
 
-      <button
-        class="search-button"
-        onclick="performSearch()"
-        aria-label="検索"
-      >
-        🔍
-      </button>
+<button onclick="openAdmin()">
+＋
+</button>
 
-    </div>
+</div>
 
-    <div class="header-actions">
-
-      <button
-        class="icon-button"
-        onclick="openUserModal()"
-        title="ユーザー"
-      >
-        👤
-      </button>
-
-      <button
-        class="icon-button"
-        onclick="openAdminModal()"
-        title="管理"
-      >
-        ⚙️
-      </button>
-
-    </div>
-
-  </div>
+</div>
 
 </header>
 
 
-<!-- =========================================================
-     カテゴリーナビ
-========================================================= -->
+<nav>
 
-<nav class="category-bar">
+<div class="nav-inner">
 
-  <div class="category-inner" id="categoryNav">
+<button onclick="loadNews()">トップ</button>
+<button onclick="loadNews('国内')">国内</button>
+<button onclick="loadNews('社会')">社会</button>
+<button onclick="loadNews('世界')">世界</button>
+<button onclick="loadNews('経済')">経済</button>
+<button onclick="loadNews('科学')">科学</button>
+<button onclick="loadNews('宇宙')">宇宙</button>
+<button onclick="loadNews('AI')">AI</button>
+<button onclick="loadNews('テクノロジー')">テクノロジー</button>
+<button onclick="loadNews('音楽')">音楽</button>
+<button onclick="loadNews('ゲーム')">ゲーム</button>
+<button onclick="loadNews('スポーツ')">スポーツ</button>
+<button onclick="loadNews('映画・アニメ')">
+映画・アニメ
+</button>
 
-    <button class="category-button active" data-genre="すべて">
-      トップ
-    </button>
-
-    <button class="category-button" data-genre="国内">
-      国内
-    </button>
-
-    <button class="category-button" data-genre="社会">
-      社会
-    </button>
-
-    <button class="category-button" data-genre="世界">
-      世界
-    </button>
-
-    <button class="category-button" data-genre="経済">
-      経済
-    </button>
-
-    <button class="category-button" data-genre="科学">
-      科学
-    </button>
-
-    <button class="category-button" data-genre="宇宙">
-      宇宙
-    </button>
-
-    <button class="category-button" data-genre="AI">
-      AI
-    </button>
-
-    <button class="category-button" data-genre="テクノロジー">
-      テクノロジー
-    </button>
-
-    <button class="category-button" data-genre="音楽">
-      音楽
-    </button>
-
-    <button class="category-button" data-genre="ゲーム">
-      ゲーム
-    </button>
-
-    <button class="category-button" data-genre="スポーツ">
-      スポーツ
-    </button>
-
-    <button class="category-button" data-genre="映画・アニメ">
-      映画・アニメ
-    </button>
-
-  </div>
+</div>
 
 </nav>
 
 
-<!-- =========================================================
-     メイン
-========================================================= -->
+<main>
 
-<main class="main">
+<section class="hero">
 
-  <div id="errorBox" class="error-box"></div>
+<h1>NEWS HUB</h1>
 
+<p>
+いま知りたいニュースを、ひとつの場所に。
+</p>
 
-  <div class="page-heading">
-
-    <div>
-      <h1 id="pageTitle">今日のニュース</h1>
-      <p id="pageDescription">
-        NEWS HUBで話題のニュースをチェック
-      </p>
-    </div>
-
-  </div>
+</section>
 
 
-  <!-- 検索情報 -->
+<h2 class="section-title">
+最新ニュース
+</h2>
 
-  <div id="searchInfo" class="search-info">
-    「<strong id="searchKeyword"></strong>」の検索結果
-  </div>
-
-
-  <!-- =======================================================
-       注目ニュース
-  ======================================================== -->
-
-  <section>
-
-    <div class="section-title">
-      🔥 注目ニュース
-    </div>
-
-    <div id="featured" class="featured-grid">
-
-      <div class="loading">
-        ニュースを読み込んでいます……
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =======================================================
-       ニュース＋サイドバー
-  ======================================================== -->
-
-  <div class="content-layout">
-
-    <section>
-
-      <div class="section-title">
-        最新ニュース
-      </div>
-
-      <div id="newsList" class="news-list">
-
-        <div class="loading">
-          ニュースを読み込んでいます……
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         サイドバー
-    ====================================================== -->
-
-    <aside class="sidebar">
-
-      <div class="sidebar-card">
-
-        <h3>ジャンル</h3>
-
-        <div class="genre-list">
-
-          <button class="genre-chip" onclick="selectGenre('国内')">
-            国内
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('社会')">
-            社会
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('世界')">
-            世界
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('経済')">
-            経済
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('科学')">
-            科学
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('宇宙')">
-            宇宙
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('AI')">
-            AI
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('テクノロジー')">
-            テクノロジー
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('音楽')">
-            音楽
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('ゲーム')">
-            ゲーム
-          </button>
-
-          <button class="genre-chip" onclick="selectGenre('スポーツ')">
-            スポーツ
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="sidebar-card">
-
-        <h3>NEWS HUBについて</h3>
-
-        <p class="about-text">
-          NEWS HUBは、さまざまなジャンルのニュースを
-          一つの場所で見られるニュース・コミュニティサイトです。
-        </p>
-
-      </div>
-
-    </aside>
-
-  </div>
+<div
+  id="newsContainer"
+  class="news-grid">
+</div>
 
 </main>
 
 
-<!-- =========================================================
-     フッター
-========================================================= -->
+<div class="bottom-nav">
 
-<footer>
+<button onclick="loadNews()">
+🏠<br>ホーム
+</button>
 
-  <div class="footer-logo">
-    NEWS <span>HUB</span>
-  </div>
+<button onclick="openMyPage()">
+👤<br>マイページ
+</button>
 
-  <div class="footer-text">
-    NEWS HUB
-  </div>
+<button onclick="openAdmin()">
+＋<br>投稿
+</button>
 
-</footer>
-
-
-<!-- =========================================================
-     スマホ下部ナビ
-========================================================= -->
-
-<nav class="mobile-nav">
-
-  <button
-    class="active"
-    onclick="goHome()"
-  >
-    <span class="nav-icon">🏠</span>
-    ホーム
-  </button>
-
-  <button
-    onclick="focusSearch()"
-  >
-    <span class="nav-icon">🔍</span>
-    検索
-  </button>
-
-  <button
-    onclick="openUserModal()"
-  >
-    <span class="nav-icon">👤</span>
-    ユーザー
-  </button>
-
-  <button
-    onclick="openAdminModal()"
-  >
-    <span class="nav-icon">⚙️</span>
-    管理
-  </button>
-
-</nav>
+</div>
 
 
-<!-- =========================================================
-     記事モーダル
-========================================================= -->
+<!-- ===================== -->
+<!-- ニュース詳細 -->
+<!-- ===================== -->
 
 <div
   id="articleModal"
-  class="modal"
-  onclick="closeModalOutside(event, 'articleModal')"
->
+  class="modal">
 
-  <div class="modal-box">
+<div class="modal-content">
 
-    <div class="modal-header">
+<div class="modal-header">
 
-      <h2>ニュース</h2>
+<h2 id="articleTitle"></h2>
 
-      <button
-        class="close-button"
-        onclick="closeModal('articleModal')"
-      >
-        ×
-      </button>
-
-    </div>
-
-    <div
-      id="articleModalBody"
-      class="modal-body"
-    ></div>
-
-  </div>
+<button
+  class="close"
+  onclick="closeModal('articleModal')">
+×
+</button>
 
 </div>
-
-
-<!-- =========================================================
-     ユーザーモーダル
-========================================================= -->
 
 <div
-  id="userModal"
-  class="modal"
-  onclick="closeModalOutside(event, 'userModal')"
->
+  id="articleMeta"
+  class="news-date">
+</div>
 
-  <div class="modal-box">
+<div
+  id="articleBody"
+  class="article-body">
+</div>
 
-    <div class="modal-header">
+<hr>
 
-      <h2>あなたのユーザー情報</h2>
+<h3>コメント</h3>
 
-      <button
-        class="close-button"
-        onclick="closeModal('userModal')"
-      >
-        ×
-      </button>
+<div id="comments"></div>
 
-    </div>
+<div class="comment-form">
 
-    <div class="modal-body">
+<input
+  id="commentInput"
+  placeholder="コメントを書く...">
 
-      <div class="profile-info">
+<button
+  class="primary"
+  onclick="postComment()">
+送信
+</button>
 
-        <div>
-          あなたのユーザーID
-        </div>
+</div>
 
-        <div
-          id="myUserId"
-          class="user-id"
-        >
-        </div>
-
-      </div>
-
-
-      <h3>フォローしているユーザー</h3>
-
-      <div id="followingList">
-        読み込み中……
-      </div>
-
-
-      <hr style="margin:25px 0;border:none;border-top:1px solid #eee;">
-
-
-      <h3>チャット</h3>
-
-      <p style="font-size:12px;color:#68707d;">
-        チャットしたい相手のユーザーIDを入力してください。
-      </p>
-
-      <div style="display:flex;gap:8px;">
-
-        <input
-          id="chatTargetInput"
-          placeholder="user_xxxxx"
-          style="
-            flex:1;
-            padding:10px;
-            border:1px solid #ddd;
-            border-radius:9px;
-          "
-        >
-
-        <button
-          class="primary-button"
-          onclick="openChat()"
-        >
-          開く
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     チャットモーダル
-========================================================= -->
+<!-- ===================== -->
+<!-- マイページ -->
+<!-- ===================== -->
+
+<div
+  id="myPageModal"
+  class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2>マイページ</h2>
+
+<button
+  class="close"
+  onclick="closeModal('myPageModal')">
+×
+</button>
+
+</div>
+
+<div class="profile">
+
+<div class="avatar">
+👤
+</div>
+
+<div
+  id="myDisplayName"
+  class="profile-name">
+名無し
+</div>
+
+<div
+  id="myUserId"
+  class="user-id">
+</div>
+
+<div class="profile-actions">
+
+<button
+  class="primary"
+  onclick="openEditName()">
+表示名を変更
+</button>
+
+</div>
+
+</div>
+
+<hr>
+
+<h3>フォロー中</h3>
+
+<div
+  id="followingList"
+  class="follow-list">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- 表示名設定 -->
+<!-- ===================== -->
+
+<div
+  id="nameModal"
+  class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2>表示名を設定</h2>
+
+<button
+  class="close"
+  onclick="closeModal('nameModal')">
+×
+</button>
+
+</div>
+
+<p>
+サイトで表示する名前を設定してください。
+</p>
+
+<div class="form-group">
+
+<label>
+表示名
+</label>
+
+<input
+  id="displayNameInput"
+  maxlength="30"
+  placeholder="例：宇宙好き">
+
+</div>
+
+<button
+  class="primary"
+  onclick="saveDisplayName()">
+保存
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- 他ユーザープロフィール -->
+<!-- ===================== -->
+
+<div
+  id="profileModal"
+  class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2>プロフィール</h2>
+
+<button
+  class="close"
+  onclick="closeModal('profileModal')">
+×
+</button>
+
+</div>
+
+<div class="profile">
+
+<div class="avatar">
+👤
+</div>
+
+<div
+  id="profileDisplayName"
+  class="profile-name">
+</div>
+
+<div
+  id="profileUserId"
+  class="user-id">
+</div>
+
+<div class="profile-actions">
+
+<button
+  id="followButton"
+  class="primary">
+フォローする
+</button>
+
+<button
+  class="secondary"
+  onclick="openChatFromProfile()">
+チャット
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- チャット -->
+<!-- ===================== -->
 
 <div
   id="chatModal"
-  class="modal"
-  onclick="closeModalOutside(event, 'chatModal')"
->
+  class="modal">
 
-  <div class="modal-box">
+<div class="modal-content">
 
-    <div class="modal-header">
+<div class="modal-header">
 
-      <h2 id="chatTitle">
-        チャット
-      </h2>
+<h2 id="chatTitle">
+チャット
+</h2>
 
-      <button
-        class="close-button"
-        onclick="closeModal('chatModal')"
-      >
-        ×
-      </button>
+<button
+  class="close"
+  onclick="closeModal('chatModal')">
+×
+</button>
 
-    </div>
+</div>
 
-    <div class="modal-body">
+<div
+  id="chatList"
+  class="chat-list">
+</div>
 
-      <div class="chat-window">
+<div class="chat-input">
 
-        <div
-          id="chatMessages"
-          class="chat-messages"
-        >
-        </div>
+<input
+  id="chatInput"
+  placeholder="メッセージ...">
 
-        <div class="chat-input">
+<button
+  class="primary"
+  onclick="sendChat()">
+送信
+</button>
 
-          <input
-            id="chatInput"
-            placeholder="メッセージを入力"
-            maxlength="500"
-            onkeydown="handleChatKey(event)"
-          >
+</div>
 
-          <button onclick="sendChat()">
-            送信
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-<!-- =========================================================
-     管理モーダル
-========================================================= -->
+<!-- ===================== -->
+<!-- 管理者ニュース投稿 -->
+<!-- ===================== -->
 
 <div
   id="adminModal"
-  class="modal"
-  onclick="closeModalOutside(event, 'adminModal')"
->
+  class="modal">
 
-  <div class="modal-box">
+<div class="modal-content">
 
-    <div class="modal-header">
+<div class="modal-header">
 
-      <h2>ニュース管理</h2>
+<h2>ニュースを追加</h2>
 
-      <button
-        class="close-button"
-        onclick="closeModal('adminModal')"
-      >
-        ×
-      </button>
+<button
+  class="close"
+  onclick="closeModal('adminModal')">
+×
+</button>
 
-    </div>
+</div>
 
-    <div class="modal-body">
+<div class="form-group">
 
-      <p style="font-size:12px;color:#68707d;">
-        自分で作成したニュースを登録できます。
-      </p>
+<label>
+管理者トークン
+</label>
 
-      <form
-        class="admin-form"
-        onsubmit="submitNews(event)"
-      >
+<input
+  id="adminToken"
+  type="password">
 
-        <input
-          id="adminToken"
-          type="password"
-          placeholder="管理者トークン"
-          required
-        >
+</div>
 
-        <input
-          id="newsTitleInput"
-          placeholder="ニュースタイトル"
-          maxlength="200"
-          required
-        >
+<div class="form-group">
 
-        <select id="newsGenreInput">
+<label>
+タイトル
+</label>
 
-          <option value="国内">国内</option>
-          <option value="社会">社会</option>
-          <option value="世界">世界</option>
-          <option value="経済">経済</option>
-          <option value="科学">科学</option>
-          <option value="宇宙">宇宙</option>
-          <option value="AI">AI</option>
-          <option value="テクノロジー">テクノロジー</option>
-          <option value="音楽">音楽</option>
-          <option value="ゲーム">ゲーム</option>
-          <option value="スポーツ">スポーツ</option>
-          <option value="映画・アニメ">映画・アニメ</option>
+<input
+  id="newsTitle">
 
-        </select>
+</div>
 
-        <input
-          id="newsImageInput"
-          placeholder="画像URL（任意）"
-        >
+<div class="form-group">
 
-        <input
-          id="newsSourceInput"
-          placeholder="情報源（任意）"
-        >
+<label>
+概要
+</label>
 
-        <textarea
-          id="newsSummaryInput"
-          placeholder="ニュース本文・概要"
-          required
-        ></textarea>
+<input
+  id="newsSummary">
 
-        <button
-          class="primary-button"
-          type="submit"
-        >
-          ニュースを公開
-        </button>
+</div>
 
-        <div
-          id="adminStatus"
-          class="admin-status"
-        >
-          ここに結果が表示されます。
-        </div>
+<div class="form-group">
 
-      </form>
+<label>
+ジャンル
+</label>
 
-    </div>
+<select id="newsGenre">
 
-  </div>
+<option>国内</option>
+<option>社会</option>
+<option>世界</option>
+<option>経済</option>
+<option>科学</option>
+<option>宇宙</option>
+<option>AI</option>
+<option>テクノロジー</option>
+<option>音楽</option>
+<option>ゲーム</option>
+<option>スポーツ</option>
+<option>映画・アニメ</option>
+<option>その他</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+本文
+</label>
+
+<textarea id="newsBody"></textarea>
+
+</div>
+
+<div class="form-group">
+
+<label>
+画像URL（任意）
+</label>
+
+<input id="newsImage">
+
+</div>
+
+<button
+  class="primary"
+  onclick="createNews()">
+ニュースを公開
+</button>
+
+</div>
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   設定
-========================================================= */
-
 const API_URL =
-  "https://news-api.taka30551.workers.dev";
+"https://news-api.taka30551.workers.dev";
+
+let allNews = [];
+let currentNews = null;
+
+let currentProfileUserId = null;
+let currentChatUserId = null;
 
 
-/* =========================================================
-   グローバル変数
-========================================================= */
-
-let currentGenre = "すべて";
-
-let currentNews = [];
-
-let currentSearch = "";
-
-let currentChatTarget = null;
-
-
-/* =========================================================
-   ユーザーID
-========================================================= */
+// =========================
+// ユーザーID
+// =========================
 
 function getUserId() {
 
-  let userId =
+  let id =
     localStorage.getItem("newsHubUserId");
 
-  if (!userId) {
+  if (!id) {
 
-    userId =
+    id =
       "user_" +
       crypto.randomUUID();
 
     localStorage.setItem(
       "newsHubUserId",
-      userId
+      id
     );
   }
 
-  return userId;
+  return id;
 }
 
 
-/* =========================================================
-   初期化
-========================================================= */
+// =========================
+// 表示名
+// =========================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+function getDisplayName() {
 
-    document
-      .querySelectorAll(".category-button")
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const genre =
-              button.dataset.genre;
-
-            selectGenre(genre);
-          }
-        );
-      });
+  return (
+    localStorage.getItem(
+      "newsHubDisplayName"
+    ) || "名無し"
+  );
+}
 
 
-    document
-      .getElementById("searchInput")
-      .addEventListener(
-        "keydown",
-        event => {
+async function loadUser() {
 
-          if (event.key === "Enter") {
-            performSearch();
-          }
-
-        }
-      );
-
-
-    loadNews();
-
-  }
-);
-
-
-/* =========================================================
-   ニュース取得
-========================================================= */
-
-async function loadNews() {
-
-  showError("");
-
-  const list =
-    document.getElementById("newsList");
-
-  const featured =
-    document.getElementById("featured");
-
-  list.innerHTML =
-    `<div class="loading">
-      ニュースを読み込んでいます……
-    </div>`;
-
-  featured.innerHTML =
-    `<div class="loading">
-      ニュースを読み込んでいます……
-    </div>`;
-
+  const userId = getUserId();
 
   try {
 
-    let url =
-      `${API_URL}/news`;
-
-    if (
-      currentGenre &&
-      currentGenre !== "すべて"
-    ) {
-
-      url +=
-        `?genre=${encodeURIComponent(currentGenre)}`;
-    }
-
-
     const response =
-      await fetch(url);
-
-
-    if (!response.ok) {
-      throw new Error(
-        `HTTP ${response.status}`
+      await fetch(
+        `${API_URL}/user?userId=${encodeURIComponent(userId)}`
       );
-    }
-
 
     const data =
       await response.json();
 
+    if (
+      data.success &&
+      data.user
+    ) {
 
-    if (!data.success) {
-      throw new Error(
-        data.error || "ニュース取得エラー"
+      localStorage.setItem(
+        "newsHubDisplayName",
+        data.user.displayName || "名無し"
       );
+
     }
 
+  } catch (error) {
 
-    currentNews =
-      Array.isArray(data.news)
-        ? data.news
-        : [];
+    console.log(error);
+
+  }
+
+}
 
 
-    if (currentSearch) {
+// =========================
+// ニュース
+// =========================
 
-      currentNews =
-        filterSearch(
-          currentNews,
-          currentSearch
-        );
+async function loadNews(genre = "") {
+
+  const container =
+    document.getElementById(
+      "newsContainer"
+    );
+
+  container.innerHTML =
+    `<div class="empty">
+      ニュースを読み込んでいます...
+    </div>`;
+
+  try {
+
+    const url =
+      genre
+        ? `${API_URL}/news?genre=${encodeURIComponent(genre)}`
+        : `${API_URL}/news`;
+
+    const response =
+      await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("API error");
     }
 
+    const data =
+      await response.json();
 
-    renderFeatured(currentNews);
+    allNews =
+      data.news || [];
 
-    renderNews(currentNews);
-
+    displayNews(allNews);
 
   } catch (error) {
 
     console.error(error);
 
-    list.innerHTML =
+    container.innerHTML =
       `<div class="empty">
         ニュースを取得できませんでした。
-        <br>
-        <small>${escapeHtml(error.message)}</small>
       </div>`;
-
-    featured.innerHTML = "";
-
-    showError(
-      "ニュースを取得できませんでした。WorkerのURLやKV設定を確認してください。"
-    );
   }
 }
 
 
-/* =========================================================
-   注目ニュース表示
-========================================================= */
-
-function renderFeatured(news) {
+function displayNews(news) {
 
   const container =
-    document.getElementById("featured");
-
+    document.getElementById(
+      "newsContainer"
+    );
 
   if (!news.length) {
 
@@ -1873,399 +1098,141 @@ function renderFeatured(news) {
     return;
   }
 
+  container.innerHTML =
+    news.map(item => {
 
-  const main =
-    news[0];
+      const image =
+        item.image
+          ? `<img src="${escapeHtml(item.image)}">`
+          : "";
 
-  const side =
-    news.slice(1, 4);
+      return `
+        <article
+          class="news-card"
+          onclick="openArticle('${item.id}')">
 
-
-  let html = `
-
-    <article
-      class="feature-main"
-      onclick="openArticle('${escapeAttr(main.id)}')"
-    >
-
-      <img
-        src="${safeImage(main.image)}"
-        alt=""
-        onerror="this.src='${placeholderImage()}'"
-      >
-
-      <div class="feature-overlay">
-
-        <div class="feature-category">
-          ${escapeHtml(main.genre || "ニュース")}
-        </div>
-
-        <h2 class="feature-title">
-          ${escapeHtml(main.title)}
-        </h2>
-
-        <div class="feature-date">
-          ${formatDate(main.date)}
-        </div>
-
-      </div>
-
-    </article>
-
-    <div class="feature-side">
-  `;
-
-
-  side.forEach(article => {
-
-    html += `
-
-      <article
-        class="side-card"
-        onclick="openArticle('${escapeAttr(article.id)}')"
-      >
-
-        <img
-          src="${safeImage(article.image)}"
-          alt=""
-          onerror="this.src='${placeholderImage()}'"
-        >
-
-        <div>
-
-          <div class="side-card-title">
-            ${escapeHtml(article.title)}
+          <div class="news-card-image">
+            ${image}
           </div>
 
-          <div class="side-card-meta">
-            ${escapeHtml(article.genre || "ニュース")}
-            ・
-            ${formatDate(article.date)}
+          <div class="news-card-content">
+
+            <span class="genre">
+              ${escapeHtml(item.genre || "その他")}
+            </span>
+
+            <h3>
+              ${escapeHtml(item.title)}
+            </h3>
+
+            <p>
+              ${escapeHtml(
+                item.summary ||
+                item.body?.slice(0,100) ||
+                ""
+              )}
+            </p>
+
+            <div class="news-date">
+              ${formatDate(item.createdAt)}
+            </div>
+
           </div>
 
-        </div>
+        </article>
+      `;
 
-      </article>
-
-    `;
-
-  });
-
-
-  html += `</div>`;
-
-
-  container.innerHTML = html;
+    }).join("");
 }
 
 
-/* =========================================================
-   ニュース一覧
-========================================================= */
+// =========================
+// 検索
+// =========================
 
-function renderNews(news) {
+function searchNews() {
 
-  const container =
-    document.getElementById("newsList");
+  const word =
+    document
+      .getElementById("searchInput")
+      .value
+      .toLowerCase();
 
+  if (!word) {
 
-  if (!news.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        該当するニュースがありません。
-      </div>`;
+    displayNews(allNews);
 
     return;
   }
 
+  const result =
+    allNews.filter(item => {
 
-  let html = "";
+      return (
+        (item.title || "")
+          .toLowerCase()
+          .includes(word) ||
 
+        (item.summary || "")
+          .toLowerCase()
+          .includes(word) ||
 
-  news.forEach(article => {
-
-    html += `
-
-      <article
-        class="news-card"
-        onclick="openArticle('${escapeAttr(article.id)}')"
-      >
-
-        <img
-          class="news-image"
-          src="${safeImage(article.image)}"
-          alt=""
-          loading="lazy"
-          onerror="this.src='${placeholderImage()}'"
-        >
-
-        <div class="news-content">
-
-          <div class="news-meta">
-
-            <span class="news-category">
-              ${escapeHtml(article.genre || "ニュース")}
-            </span>
-
-            <span>
-              ${formatDate(article.date)}
-            </span>
-
-          </div>
-
-          <h2 class="news-title">
-            ${escapeHtml(article.title)}
-          </h2>
-
-          <p class="news-summary">
-            ${escapeHtml(article.summary || "")}
-          </p>
-
-        </div>
-
-      </article>
-
-    `;
-
-  });
-
-
-  container.innerHTML = html;
-}
-
-
-/* =========================================================
-   ジャンル変更
-========================================================= */
-
-function selectGenre(genre) {
-
-  currentGenre = genre;
-
-  currentSearch = "";
-
-  document
-    .getElementById("searchInput")
-    .value = "";
-
-
-  document
-    .querySelectorAll(".category-button")
-    .forEach(button => {
-
-      button.classList.toggle(
-        "active",
-        button.dataset.genre === genre
+        (item.body || "")
+          .toLowerCase()
+          .includes(word)
       );
 
     });
 
-
-  document
-    .getElementById("pageTitle")
-    .textContent =
-      genre === "すべて"
-        ? "今日のニュース"
-        : genre;
-
-
-  document
-    .getElementById("searchInfo")
-    .style.display = "none";
-
-
-  loadNews();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  displayNews(result);
 }
 
 
-/* =========================================================
-   検索
-========================================================= */
-
-function performSearch() {
-
-  const input =
-    document.getElementById("searchInput");
-
-  const keyword =
-    input.value.trim();
-
-
-  if (!keyword) {
-
-    currentSearch = "";
-
-    document
-      .getElementById("searchInfo")
-      .style.display = "none";
-
-    loadNews();
-
-    return;
-  }
-
-
-  currentSearch = keyword;
-
-
-  document
-    .getElementById("searchKeyword")
-    .textContent = keyword;
-
-
-  document
-    .getElementById("searchInfo")
-    .style.display = "block";
-
-
-  loadNews();
-}
-
-
-function filterSearch(news, keyword) {
-
-  const lower =
-    keyword.toLowerCase();
-
-
-  return news.filter(article => {
-
-    const text =
-      [
-        article.title,
-        article.summary,
-        article.genre
-      ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-
-    return text.includes(lower);
-  });
-}
-
-
-/* =========================================================
-   記事詳細
-========================================================= */
+// =========================
+// ニュース詳細
+// =========================
 
 async function openArticle(id) {
 
-  const article =
-    currentNews.find(
-      item => String(item.id) === String(id)
+  currentNews =
+    allNews.find(
+      item => item.id === id
     );
 
+  if (!currentNews) return;
 
-  if (!article) return;
+  document.getElementById(
+    "articleTitle"
+  ).textContent =
+    currentNews.title;
 
+  document.getElementById(
+    "articleMeta"
+  ).textContent =
+    `${currentNews.genre || "その他"} ・ ${formatDate(currentNews.createdAt)}`;
 
-  const body =
-    document.getElementById(
-      "articleModalBody"
-    );
+  document.getElementById(
+    "articleBody"
+  ).textContent =
+    currentNews.body || "";
 
+  document.getElementById(
+    "articleModal"
+  ).style.display = "block";
 
-  body.innerHTML = `
-
-    <img
-      class="article-image"
-      src="${safeImage(article.image)}"
-      alt=""
-      onerror="this.src='${placeholderImage()}'"
-    >
-
-    <div class="article-category">
-      ${escapeHtml(article.genre || "ニュース")}
-    </div>
-
-    <h1 class="article-title">
-      ${escapeHtml(article.title)}
-    </h1>
-
-    <div class="article-date">
-      ${formatDate(article.date)}
-    </div>
-
-    <div class="article-summary">
-      ${escapeHtml(article.summary || "")}
-    </div>
-
-    ${
-      article.source
-        ? `
-          <div class="article-source">
-            情報源：
-            ${escapeHtml(article.source)}
-          </div>
-        `
-        : ""
-    }
-
-    <button
-      id="followButton"
-      class="follow-button"
-      onclick="toggleFollowPrompt()"
-    >
-      フォロー
-    </button>
-
-    <section class="comments-section">
-
-      <h3>
-        コメント
-      </h3>
-
-      <div class="comment-form">
-
-        <textarea
-          id="commentInput"
-          placeholder="コメントを書く"
-          maxlength="1000"
-        ></textarea>
-
-        <button
-          class="primary-button"
-          onclick="postComment('${escapeAttr(article.id)}')"
-        >
-          投稿
-        </button>
-
-      </div>
-
-      <div id="commentsList">
-        コメントを読み込んでいます……
-      </div>
-
-    </section>
-  `;
-
-
-  openModal("articleModal");
-
-
-  await loadComments(article.id);
+  await loadComments(id);
 }
 
-
-/* =========================================================
-   コメント取得
-========================================================= */
 
 async function loadComments(newsId) {
 
   const container =
     document.getElementById(
-      "commentsList"
+      "comments"
     );
 
+  container.innerHTML =
+    "コメントを読み込んでいます...";
 
   try {
 
@@ -2274,48 +1241,34 @@ async function loadComments(newsId) {
         `${API_URL}/comments?newsId=${encodeURIComponent(newsId)}`
       );
 
-
     const data =
       await response.json();
 
+    const comments =
+      data.comments || [];
 
-    if (
-      !data.success ||
-      !Array.isArray(data.comments)
-    ) {
-
-      throw new Error(
-        "コメントを取得できませんでした"
-      );
-    }
-
-
-    if (!data.comments.length) {
+    if (!comments.length) {
 
       container.innerHTML =
-        `<div class="empty">
-          まだコメントはありません。
-        </div>`;
+        "<p>まだコメントはありません。</p>";
 
       return;
     }
 
-
     container.innerHTML =
-      data.comments
-        .map(comment => `
+      comments.map(comment => {
 
+        return `
           <div class="comment">
 
-            <div>
+            <div
+              class="comment-name"
+              onclick="openProfile('${comment.userId}')">
 
-              <span class="comment-user">
-                ${escapeHtml(comment.userId)}
-              </span>
-
-              <span class="comment-date">
-                ${formatDate(comment.date)}
-              </span>
+              ${escapeHtml(
+                comment.displayName ||
+                "名無し"
+              )}
 
             </div>
 
@@ -2324,42 +1277,32 @@ async function loadComments(newsId) {
             </div>
 
           </div>
+        `;
 
-        `)
-        .join("");
-
+      }).join("");
 
   } catch (error) {
 
     container.innerHTML =
-      `<div class="empty">
-        コメントを取得できませんでした。
-      </div>`;
+      "<p>コメントを取得できませんでした。</p>";
+
   }
 }
 
 
-/* =========================================================
-   コメント投稿
-========================================================= */
+async function postComment() {
 
-async function postComment(newsId) {
+  if (!currentNews) return;
 
   const input =
     document.getElementById(
       "commentInput"
     );
 
-
   const text =
     input.value.trim();
 
-
-  if (!text) {
-    alert("コメントを入力してください。");
-    return;
-  }
-
+  if (!text) return;
 
   try {
 
@@ -2376,67 +1319,301 @@ async function postComment(newsId) {
 
           body: JSON.stringify({
 
-            newsId: newsId,
+            newsId:
+              currentNews.id,
 
-            userId: getUserId(),
+            userId:
+              getUserId(),
 
-            text: text
+            displayName:
+              getDisplayName(),
+
+            text
 
           })
         }
       );
 
-
     const data =
       await response.json();
 
-
     if (!data.success) {
 
-      throw new Error(
-        data.error || "投稿失敗"
+      alert(
+        data.message ||
+        "コメントできませんでした"
       );
-    }
 
+      return;
+    }
 
     input.value = "";
 
-    await loadComments(newsId);
-
+    await loadComments(
+      currentNews.id
+    );
 
   } catch (error) {
 
     alert(
-      "コメントを投稿できませんでした。"
+      "コメントを送信できませんでした"
     );
+
   }
 }
 
 
-/* =========================================================
-   フォロー
-========================================================= */
+// =========================
+// マイページ
+// =========================
 
-function toggleFollowPrompt() {
+async function openMyPage() {
 
-  const target =
-    prompt(
-      "フォローしたいユーザーのIDを入力してください。"
-    );
+  document.getElementById(
+    "myPageModal"
+  ).style.display = "block";
 
+  document.getElementById(
+    "myDisplayName"
+  ).textContent =
+    getDisplayName();
 
-  if (!target) return;
+  document.getElementById(
+    "myUserId"
+  ).textContent =
+    getUserId();
 
+  await loadFollowing();
 
-  followUser(target);
 }
 
 
-async function followUser(targetUserId) {
+async function loadFollowing() {
 
-  const userId =
-    getUserId();
+  const container =
+    document.getElementById(
+      "followingList"
+    );
 
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/following?userId=${encodeURIComponent(getUserId())}`
+      );
+
+    const data =
+      await response.json();
+
+    const list =
+      data.following || [];
+
+    if (!list.length) {
+
+      container.innerHTML =
+        "<p>まだフォローしていません。</p>";
+
+      return;
+    }
+
+    container.innerHTML =
+      list.map(item => {
+
+        return `
+          <div
+            class="follow-user"
+            onclick="openProfile('${item.targetUserId}')">
+
+            ${escapeHtml(item.targetUserId)}
+
+          </div>
+        `;
+
+      }).join("");
+
+  } catch (error) {
+
+    container.innerHTML =
+      "<p>フォロー情報を取得できませんでした。</p>";
+
+  }
+}
+
+
+// =========================
+// 表示名変更
+// =========================
+
+function openEditName() {
+
+  document.getElementById(
+    "displayNameInput"
+  ).value =
+    getDisplayName();
+
+  document.getElementById(
+    "nameModal"
+  ).style.display = "block";
+}
+
+
+async function saveDisplayName() {
+
+  const input =
+    document.getElementById(
+      "displayNameInput"
+    );
+
+  const name =
+    input.value.trim();
+
+  if (!name) {
+
+    alert("表示名を入力してください");
+
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/user`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            userId:
+              getUserId(),
+
+            displayName:
+              name
+
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!data.success) {
+
+      alert(
+        data.message ||
+        "保存できませんでした"
+      );
+
+      return;
+    }
+
+    localStorage.setItem(
+      "newsHubDisplayName",
+      name
+    );
+
+    document.getElementById(
+      "myDisplayName"
+    ).textContent =
+      name;
+
+    closeModal("nameModal");
+
+  } catch (error) {
+
+    alert(
+      "表示名を保存できませんでした"
+    );
+
+  }
+}
+
+
+// =========================
+// プロフィール
+// =========================
+
+async function openProfile(userId) {
+
+  currentProfileUserId =
+    userId;
+
+  document.getElementById(
+    "profileModal"
+  ).style.display = "block";
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/user?userId=${encodeURIComponent(userId)}`
+      );
+
+    const data =
+      await response.json();
+
+    const user =
+      data.user || {};
+
+    document.getElementById(
+      "profileDisplayName"
+    ).textContent =
+      user.displayName ||
+      "名無し";
+
+    document.getElementById(
+      "profileUserId"
+    ).textContent =
+      user.userId ||
+      userId;
+
+  } catch (error) {
+
+    document.getElementById(
+      "profileDisplayName"
+    ).textContent =
+      "名無し";
+
+    document.getElementById(
+      "profileUserId"
+    ).textContent =
+      userId;
+  }
+
+  const button =
+    document.getElementById(
+      "followButton"
+    );
+
+  button.onclick =
+    () => toggleFollow(userId);
+}
+
+
+// =========================
+// フォロー
+// =========================
+
+async function toggleFollow(userId) {
+
+  if (userId === getUserId()) {
+
+    alert(
+      "自分自身はフォローできません"
+    );
+
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      "followButton"
+    );
 
   try {
 
@@ -2452,191 +1629,67 @@ async function followUser(targetUserId) {
           },
 
           body: JSON.stringify({
-            userId,
-            targetUserId
+
+            userId:
+              getUserId(),
+
+            targetUserId:
+              userId
+
           })
         }
       );
 
-
     const data =
       await response.json();
 
+    if (data.success) {
 
-    if (!data.success) {
+      button.textContent =
+        "フォロー中";
 
-      throw new Error(
-        data.error || "フォロー失敗"
-      );
     }
-
-
-    alert("フォローしました。");
-
 
   } catch (error) {
 
     alert(
-      "フォローできませんでした。"
+      "フォローできませんでした"
     );
+
   }
 }
 
 
-/* =========================================================
-   フォロー一覧
-========================================================= */
+// =========================
+// チャット
+// =========================
 
-async function loadFollowing() {
+function openChatFromProfile() {
 
-  const container =
-    document.getElementById(
-      "followingList"
-    );
-
-
-  try {
-
-    const response =
-      await fetch(
-        `${API_URL}/following?userId=${encodeURIComponent(getUserId())}`
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !data.success ||
-      !Array.isArray(data.following)
-    ) {
-
-      throw new Error();
-    }
-
-
-    if (!data.following.length) {
-
-      container.innerHTML =
-        `<div style="color:#68707d;font-size:13px;">
-          まだフォローしていません。
-        </div>`;
-
-      return;
-    }
-
-
-    container.innerHTML =
-      data.following
-        .map(id => `
-
-          <div
-            style="
-              padding:10px 0;
-              border-bottom:1px solid #eee;
-              display:flex;
-              justify-content:space-between;
-              gap:8px;
-            "
-          >
-
-            <span class="user-id">
-              ${escapeHtml(id)}
-            </span>
-
-            <button
-              onclick="openChatWith('${escapeAttr(id)}')"
-              style="
-                border:1px solid #ddd;
-                background:white;
-                border-radius:8px;
-                padding:6px 10px;
-              "
-            >
-              チャット
-            </button>
-
-          </div>
-
-        `)
-        .join("");
-
-
-  } catch (error) {
-
-    container.innerHTML =
-      `<div style="color:#a40019;">
-        フォロー一覧を取得できませんでした。
-      </div>`;
+  if (!currentProfileUserId) {
+    return;
   }
-}
 
-
-/* =========================================================
-   ユーザーモーダル
-========================================================= */
-
-function openUserModal() {
-
-  document
-    .getElementById("myUserId")
-    .textContent =
-      getUserId();
-
-
-  openModal("userModal");
-
-  loadFollowing();
-}
-
-
-/* =========================================================
-   チャット
-========================================================= */
-
-function openChat() {
-
-  const target =
-    document
-      .getElementById(
-        "chatTargetInput"
-      )
-      .value
-      .trim();
-
-
-  if (!target) {
+  if (
+    currentProfileUserId ===
+    getUserId()
+  ) {
 
     alert(
-      "相手のユーザーIDを入力してください。"
+      "自分とはチャットできません"
     );
 
     return;
   }
 
+  currentChatUserId =
+    currentProfileUserId;
 
-  openChatWith(target);
-}
+  closeModal("profileModal");
 
-
-function openChatWith(target) {
-
-  currentChatTarget =
-    target;
-
-
-  closeModal("userModal");
-
-
-  document
-    .getElementById("chatTitle")
-    .textContent =
-      `${target} とのチャット`;
-
-
-  openModal("chatModal");
-
+  document.getElementById(
+    "chatModal"
+  ).style.display = "block";
 
   loadChat();
 }
@@ -2644,122 +1697,89 @@ function openChatWith(target) {
 
 async function loadChat() {
 
-  if (!currentChatTarget) return;
-
-
-  const container =
+  const list =
     document.getElementById(
-      "chatMessages"
+      "chatList"
     );
 
-
-  container.innerHTML =
-    `<div style="text-align:center;color:#68707d;">
-      読み込み中……
-    </div>`;
-
+  list.innerHTML =
+    "チャットを読み込んでいます...";
 
   try {
 
-    const userId =
-      getUserId();
-
-
     const response =
       await fetch(
-        `${API_URL}/chat?userA=${encodeURIComponent(userId)}&userB=${encodeURIComponent(currentChatTarget)}`
+        `${API_URL}/chat?userId=${encodeURIComponent(getUserId())}&targetUserId=${encodeURIComponent(currentChatUserId)}`
       );
-
 
     const data =
       await response.json();
 
+    const messages =
+      data.messages || [];
 
-    if (
-      !data.success ||
-      !Array.isArray(data.messages)
-    ) {
+    if (!messages.length) {
 
-      throw new Error();
-    }
-
-
-    if (!data.messages.length) {
-
-      container.innerHTML =
-        `<div style="text-align:center;color:#68707d;padding:40px 0;">
-          まだメッセージはありません。
-        </div>`;
+      list.innerHTML =
+        "<p>まだメッセージはありません。</p>";
 
       return;
     }
 
+    list.innerHTML =
+      messages.map(message => {
 
-    container.innerHTML =
-      data.messages
-        .map(message => {
+        const mine =
+          message.userId ===
+          getUserId();
 
-          const mine =
-            message.userId === userId;
+        return `
+          <div
+            class="chat-message ${mine ? "mine" : ""}">
 
+            <div class="chat-bubble">
 
-          return `
-
-            <div
-              class="chat-message ${mine ? "mine" : ""}"
-            >
-
-              <div>
-
-                <div class="chat-bubble">
-                  ${escapeHtml(message.text)}
-                </div>
-
-                <div class="chat-time">
-                  ${formatDate(message.date)}
-                </div>
-
+              <div class="chat-name">
+                ${escapeHtml(
+                  message.displayName ||
+                  "名無し"
+                )}
               </div>
+
+              ${escapeHtml(
+                message.text
+              )}
 
             </div>
 
-          `;
+          </div>
+        `;
 
-        })
-        .join("");
+      }).join("");
 
-
-    container.scrollTop =
-      container.scrollHeight;
-
+    list.scrollTop =
+      list.scrollHeight;
 
   } catch (error) {
 
-    container.innerHTML =
-      `<div style="text-align:center;color:#a40019;padding:40px;">
-        チャットを取得できませんでした。
-      </div>`;
+    list.innerHTML =
+      "<p>チャットを取得できませんでした。</p>";
+
   }
 }
 
 
 async function sendChat() {
 
-  if (!currentChatTarget) return;
-
-
   const input =
     document.getElementById(
       "chatInput"
     );
 
-
   const text =
     input.value.trim();
 
-
   if (!text) return;
-
 
   try {
 
@@ -2780,120 +1800,96 @@ async function sendChat() {
               getUserId(),
 
             targetUserId:
-              currentChatTarget,
+              currentChatUserId,
 
-            text:
-              text
+            displayName:
+              getDisplayName(),
+
+            text
 
           })
         }
       );
 
-
     const data =
       await response.json();
 
-
     if (!data.success) {
 
-      throw new Error(
-        data.error || "送信失敗"
+      alert(
+        data.message ||
+        "送信できませんでした"
       );
-    }
 
+      return;
+    }
 
     input.value = "";
 
     await loadChat();
 
-
   } catch (error) {
 
     alert(
-      "メッセージを送信できませんでした。"
+      "メッセージを送信できませんでした"
     );
+
   }
 }
 
 
-function handleChatKey(event) {
+// =========================
+// 管理者
+// =========================
 
-  if (
-    event.key === "Enter" &&
-    !event.shiftKey
-  ) {
+function openAdmin() {
 
-    event.preventDefault();
-
-    sendChat();
-  }
+  document.getElementById(
+    "adminModal"
+  ).style.display = "block";
 }
 
 
-/* =========================================================
-   管理画面
-========================================================= */
-
-function openAdminModal() {
-
-  openModal("adminModal");
-}
-
-
-async function submitNews(event) {
-
-  event.preventDefault();
-
+async function createNews() {
 
   const token =
-    document
-      .getElementById("adminToken")
-      .value
-      .trim();
-
+    document.getElementById(
+      "adminToken"
+    ).value;
 
   const title =
-    document
-      .getElementById("newsTitleInput")
-      .value
-      .trim();
-
-
-  const genre =
-    document
-      .getElementById("newsGenreInput")
-      .value;
-
-
-  const image =
-    document
-      .getElementById("newsImageInput")
-      .value
-      .trim();
-
-
-  const source =
-    document
-      .getElementById("newsSourceInput")
-      .value
-      .trim();
-
+    document.getElementById(
+      "newsTitle"
+    ).value.trim();
 
   const summary =
-    document
-      .getElementById("newsSummaryInput")
-      .value
-      .trim();
+    document.getElementById(
+      "newsSummary"
+    ).value.trim();
 
+  const genre =
+    document.getElementById(
+      "newsGenre"
+    ).value;
 
-  const status =
-    document
-      .getElementById("adminStatus");
+  const body =
+    document.getElementById(
+      "newsBody"
+    ).value.trim();
 
+  const image =
+    document.getElementById(
+      "newsImage"
+    ).value.trim();
 
-  status.textContent =
-    "ニュースを公開しています……";
+  if (!token || !title || !body) {
 
+    alert(
+      "管理者トークン・タイトル・本文を入力してください"
+    );
+
+    return;
+  }
 
   try {
 
@@ -2918,306 +1914,108 @@ async function submitNews(event) {
             title,
             summary,
             genre,
-            image,
-            source
+            body,
+            image
 
           })
         }
       );
 
-
     const data =
       await response.json();
 
+    if (!data.success) {
 
-    if (!response.ok || !data.success) {
-
-      throw new Error(
-        data.error ||
-        `HTTP ${response.status}`
+      alert(
+        data.message ||
+        "ニュースを作成できませんでした"
       );
+
+      return;
     }
 
+    alert(
+      "ニュースを公開しました"
+    );
 
-    status.textContent =
-      "ニュースを公開しました。";
+    closeModal("adminModal");
 
+    document.getElementById(
+      "newsTitle"
+    ).value = "";
 
-    document
-      .getElementById("newsTitleInput")
-      .value = "";
+    document.getElementById(
+      "newsSummary"
+    ).value = "";
 
-    document
-      .getElementById("newsImageInput")
-      .value = "";
+    document.getElementById(
+      "newsBody"
+    ).value = "";
 
-    document
-      .getElementById("newsSourceInput")
-      .value = "";
-
-    document
-      .getElementById("newsSummaryInput")
-      .value = "";
-
+    document.getElementById(
+      "newsImage"
+    ).value = "";
 
     await loadNews();
 
-
   } catch (error) {
 
-    console.error(error);
+    alert(
+      "ニュースを公開できませんでした"
+    );
 
-    status.textContent =
-      "公開できませんでした：" +
-      error.message;
   }
 }
 
 
-/* =========================================================
-   モーダル
-========================================================= */
-
-function openModal(id) {
-
-  document
-    .getElementById(id)
-    .classList.add("show");
-
-  document.body.style.overflow =
-    "hidden";
-}
-
+// =========================
+// モーダル
+// =========================
 
 function closeModal(id) {
 
-  document
-    .getElementById(id)
-    .classList.remove("show");
-
-  document.body.style.overflow =
-    "";
+  document.getElementById(
+    id
+  ).style.display = "none";
 }
 
 
-function closeModalOutside(event, id) {
+window.addEventListener(
+  "click",
+  event => {
 
-  if (
-    event.target.id === id
-  ) {
+    document
+      .querySelectorAll(".modal")
+      .forEach(modal => {
 
-    closeModal(id);
+        if (event.target === modal) {
+
+          modal.style.display =
+            "none";
+        }
+
+      });
+
   }
-}
+);
 
 
-/* =========================================================
-   ホーム
-========================================================= */
-
-function goHome() {
-
-  currentGenre = "すべて";
-
-  currentSearch = "";
-
-  document
-    .getElementById("searchInput")
-    .value = "";
-
-
-  document
-    .querySelectorAll(".category-button")
-    .forEach(button => {
-
-      button.classList.toggle(
-        "active",
-        button.dataset.genre === "すべて"
-      );
-
-    });
-
-
-  document
-    .getElementById("pageTitle")
-    .textContent =
-      "今日のニュース";
-
-
-  document
-    .getElementById("searchInfo")
-    .style.display =
-      "none";
-
-
-  loadNews();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-/* =========================================================
-   検索へ移動
-========================================================= */
-
-function focusSearch() {
-
-  const input =
-    document.getElementById(
-      "searchInput"
-    );
-
-
-  input.focus();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-/* =========================================================
-   エラー
-========================================================= */
-
-function showError(message) {
-
-  const box =
-    document.getElementById(
-      "errorBox"
-    );
-
-
-  if (!message) {
-
-    box.style.display =
-      "none";
-
-    return;
-  }
-
-
-  box.textContent =
-    message;
-
-  box.style.display =
-    "block";
-}
-
-
-/* =========================================================
-   日付
-========================================================= */
+// =========================
+// 共通
+// =========================
 
 function formatDate(date) {
 
-  if (!date) {
-    return "";
-  }
+  if (!date) return "";
 
-
-  const d =
-    new Date(date);
-
-
-  if (Number.isNaN(d.getTime())) {
-    return date;
-  }
-
-
-  return d.toLocaleString(
-    "ja-JP",
-    {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    }
-  );
+  return new Date(date)
+    .toLocaleString("ja-JP");
 }
 
-
-/* =========================================================
-   画像
-========================================================= */
-
-function safeImage(url) {
-
-  if (!url) {
-    return placeholderImage();
-  }
-
-
-  try {
-
-    const parsed =
-      new URL(url);
-
-
-    if (
-      parsed.protocol !== "http:" &&
-      parsed.protocol !== "https:"
-    ) {
-
-      return placeholderImage();
-    }
-
-
-    return url;
-
-
-  } catch {
-
-    return placeholderImage();
-  }
-}
-
-
-function placeholderImage() {
-
-  return "data:image/svg+xml;charset=UTF-8," +
-    encodeURIComponent(`
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="800"
-        height="450"
-        viewBox="0 0 800 450"
-      >
-
-        <rect
-          width="800"
-          height="450"
-          fill="#e9ebee"
-        />
-
-        <text
-          x="400"
-          y="230"
-          text-anchor="middle"
-          font-size="38"
-          font-family="sans-serif"
-          fill="#9298a1"
-        >
-          NEWS HUB
-        </text>
-
-      </svg>
-    `);
-}
-
-
-/* =========================================================
-   XSS対策
-========================================================= */
 
 function escapeHtml(value) {
 
-  return String(value ?? "")
+  return String(value || "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -3226,22 +2024,44 @@ function escapeHtml(value) {
 }
 
 
-function escapeAttr(value) {
+// =========================
+// 起動
+// =========================
 
-  return String(value ?? "")
-    .replaceAll("\\", "\\\\")
-    .replaceAll("'", "\\'");
+async function init() {
+
+  await loadUser();
+
+  const name =
+    getDisplayName();
+
+  // 初回だけ表示名設定
+  if (
+    name === "名無し" &&
+    !localStorage.getItem(
+      "newsHubNameAsked"
+    )
+  ) {
+
+    localStorage.setItem(
+      "newsHubNameAsked",
+      "1"
+    );
+
+    document.getElementById(
+      "displayNameInput"
+    ).value = "";
+
+    document.getElementById(
+      "nameModal"
+    ).style.display = "block";
+  }
+
+  await loadNews();
 }
 
 
-/* =========================================================
-   初期ユーザーID確認
-========================================================= */
-
-console.log(
-  "NEWS HUB user ID:",
-  getUserId()
-);
+init();
 
 </script>
 
