@@ -669,6 +669,107 @@ main {
 
 
 /* =========================
+   管理者トピック設定
+========================= */
+
+.admin-section {
+  margin-top: 25px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #eee;
+}
+
+.admin-section h3 {
+  margin-top: 0;
+}
+
+.admin-topic-list {
+  margin-top: 15px;
+}
+
+.topic-setting-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 8px;
+}
+
+.topic-setting-row input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 10px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 7px;
+}
+
+.topic-setting-actions {
+  display: flex;
+
+  gap: 4px;
+}
+
+.topic-setting-actions button {
+  border: none;
+
+  background: #f0f0f0;
+
+  border-radius: 7px;
+
+  width: 36px;
+
+  height: 36px;
+}
+
+.topic-setting-actions button:hover {
+  background: #e2e2e2;
+}
+
+.topic-add {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.topic-add input {
+  flex: 1;
+
+  padding: 10px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 7px;
+}
+
+.admin-auth-status {
+  margin-top: 10px;
+
+  font-size: 14px;
+
+  color: #666;
+}
+
+.admin-auth-status.success {
+  color: #333;
+
+  font-weight: bold;
+}
+
+.admin-panel {
+  display: none;
+}
+
+
+/* =========================
    右下の投稿ボタン
 ========================= */
 
@@ -791,6 +892,14 @@ main {
     background: #f3f3f3;
   }
 
+  .topic-setting-row {
+    align-items: stretch;
+  }
+
+  .topic-setting-actions {
+    flex-wrap: wrap;
+  }
+
 }
 
 </style>
@@ -845,58 +954,12 @@ main {
 
 <nav>
 
-<div class="nav-inner">
+<div
+  id="topicNav"
+  class="nav-inner">
 
 <button onclick="loadNews()">
 トップ
-</button>
-
-<button onclick="loadNews('国内')">
-国内
-</button>
-
-<button onclick="loadNews('社会')">
-社会
-</button>
-
-<button onclick="loadNews('世界')">
-世界
-</button>
-
-<button onclick="loadNews('経済')">
-経済
-</button>
-
-<button onclick="loadNews('科学')">
-科学
-</button>
-
-<button onclick="loadNews('宇宙')">
-宇宙
-</button>
-
-<button onclick="loadNews('AI')">
-AI
-</button>
-
-<button onclick="loadNews('テクノロジー')">
-テクノロジー
-</button>
-
-<button onclick="loadNews('音楽')">
-音楽
-</button>
-
-<button onclick="loadNews('ゲーム')">
-ゲーム
-</button>
-
-<button onclick="loadNews('スポーツ')">
-スポーツ
-</button>
-
-<button onclick="loadNews('映画・アニメ')">
-映画・アニメ
 </button>
 
 </div>
@@ -1334,7 +1397,7 @@ NEWS HUB
 <div class="modal-header">
 
 <h2>
-ニュースを追加
+管理者
 </h2>
 
 <button
@@ -1346,6 +1409,10 @@ NEWS HUB
 </div>
 
 
+<!-- =========================
+     管理者認証
+========================= -->
+
 <div class="form-group">
 
 <label>
@@ -1354,9 +1421,102 @@ NEWS HUB
 
 <input
   id="adminToken"
-  type="password">
+  type="password"
+  placeholder="管理者トークンを入力">
 
 </div>
+
+
+<button
+  class="primary"
+  onclick="authenticateAdmin()">
+
+管理者として認証
+
+</button>
+
+
+<div
+  id="adminAuthStatus"
+  class="admin-auth-status">
+
+管理者トークンを入力して認証してください。
+
+</div>
+
+
+<!-- =========================
+     管理者パネル
+========================= -->
+
+<div
+  id="adminPanel"
+  class="admin-panel">
+
+
+<!-- =========================
+     トピック設定
+========================= -->
+
+<div class="admin-section">
+
+<h3>
+トピック設定
+</h3>
+
+<p>
+サイト上部に表示するトピックを設定できます。
+</p>
+
+
+<div
+  id="adminTopicList"
+  class="admin-topic-list">
+</div>
+
+
+<div class="topic-add">
+
+<input
+  id="newTopicInput"
+  maxlength="30"
+  placeholder="新しいトピック名">
+
+
+<button
+  class="secondary"
+  onclick="addTopic()">
+
+＋ 追加
+
+</button>
+
+</div>
+
+
+<br>
+
+
+<button
+  class="primary"
+  onclick="saveTopics()">
+
+トピックを保存
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     ニュース投稿
+========================= -->
+
+<div class="admin-section">
+
+<h3>
+ニュースを追加
+</h3>
 
 
 <div class="form-group">
@@ -1390,59 +1550,6 @@ NEWS HUB
 </label>
 
 <select id="newsGenre">
-
-<option>
-国内
-</option>
-
-<option>
-社会
-</option>
-
-<option>
-世界
-</option>
-
-<option>
-経済
-</option>
-
-<option>
-科学
-</option>
-
-<option>
-宇宙
-</option>
-
-<option>
-AI
-</option>
-
-<option>
-テクノロジー
-</option>
-
-<option>
-音楽
-</option>
-
-<option>
-ゲーム
-</option>
-
-<option>
-スポーツ
-</option>
-
-<option>
-映画・アニメ
-</option>
-
-<option>
-その他
-</option>
-
 </select>
 
 </div>
@@ -1455,8 +1562,7 @@ AI
 </label>
 
 <textarea
-  id="newsBody">
-</textarea>
+  id="newsBody"></textarea>
 
 </div>
 
@@ -1481,6 +1587,10 @@ AI
 
 </button>
 
+</div>
+
+
+</div>
 
 </div>
 
@@ -1509,6 +1619,30 @@ let currentNews = null;
 let currentProfileUserId = null;
 
 let currentChatUserId = null;
+
+
+/*
+   管理者トークンは
+   ページを開いている間だけ保持します。
+
+   localStorageには保存しません。
+*/
+
+let adminToken = "";
+
+
+/*
+   現在のトピック
+*/
+
+let topics = [];
+
+
+/*
+   管理者画面で編集中のトピック
+*/
+
+let editingTopics = [];
 
 
 /* =========================
@@ -1596,6 +1730,898 @@ async function loadUser() {
   } catch (error) {
 
     console.log(error);
+
+  }
+
+}
+
+
+/* =========================
+   トピック読み込み
+========================= */
+
+async function loadTopics() {
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/topics`
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "topics API error"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      data.success &&
+      Array.isArray(data.topics)
+    ) {
+
+      topics =
+        data.topics;
+
+    } else {
+
+      topics = [];
+
+    }
+
+
+    renderTopicNav();
+
+    renderGenreSelect();
+
+
+  } catch (error) {
+
+    console.error(
+      "トピック読み込みエラー:",
+      error
+    );
+
+
+    /*
+       APIから取得できなかった場合は
+       現在のサイトで使っていた
+       デフォルトのトピックを使用します。
+    */
+
+    topics = [
+      "国内",
+      "社会",
+      "世界",
+      "経済",
+      "科学",
+      "宇宙",
+      "AI",
+      "テクノロジー",
+      "音楽",
+      "ゲーム",
+      "スポーツ",
+      "映画・アニメ"
+    ];
+
+
+    renderTopicNav();
+
+    renderGenreSelect();
+
+  }
+
+}
+
+
+/* =========================
+   ナビゲーション表示
+========================= */
+
+function renderTopicNav() {
+
+  const nav =
+    document.getElementById(
+      "topicNav"
+    );
+
+
+  if (!nav) {
+
+    return;
+
+  }
+
+
+  /*
+     トップは固定
+  */
+
+  let html = `
+    <button onclick="loadNews()">
+      トップ
+    </button>
+  `;
+
+
+  /*
+     Cloudflare KVに保存されている
+     トピックを追加
+  */
+
+  topics.forEach(
+    topic => {
+
+      html += `
+        <button
+          onclick="loadNews('${escapeJs(topic)}')">
+
+          ${escapeHtml(topic)}
+
+        </button>
+      `;
+
+    }
+  );
+
+
+  nav.innerHTML =
+    html;
+
+}
+
+
+/* =========================
+   ニュースジャンル選択
+========================= */
+
+function renderGenreSelect() {
+
+  const select =
+    document.getElementById(
+      "newsGenre"
+    );
+
+
+  if (!select) {
+
+    return;
+
+  }
+
+
+  /*
+     現在選択されている値を保存
+  */
+
+  const oldValue =
+    select.value;
+
+
+  let html = "";
+
+
+  topics.forEach(
+    topic => {
+
+      html += `
+        <option value="${escapeHtml(topic)}">
+          ${escapeHtml(topic)}
+        </option>
+      `;
+
+    }
+  );
+
+
+  /*
+     トピックが一つもない場合でも
+     その他を選べるようにする
+  */
+
+  if (!topics.length) {
+
+    html = `
+      <option value="その他">
+        その他
+      </option>
+    `;
+
+  }
+
+
+  /*
+     既存ニュースなどに
+     「その他」が残っている場合のため
+     その他も残します。
+  */
+
+  html += `
+    <option value="その他">
+      その他
+    </option>
+  `;
+
+
+  select.innerHTML =
+    html;
+
+
+  /*
+     前回の値がまだ存在する場合は
+     その値を維持
+  */
+
+  const exists =
+    Array.from(
+      select.options
+    ).some(
+      option =>
+        option.value ===
+        oldValue
+    );
+
+
+  if (exists) {
+
+    select.value =
+      oldValue;
+
+  }
+
+}
+
+
+/* =========================
+   管理者認証
+========================= */
+
+async function authenticateAdmin() {
+
+  const input =
+    document.getElementById(
+      "adminToken"
+    );
+
+
+  const token =
+    input.value.trim();
+
+
+  if (!token) {
+
+    alert(
+      "管理者トークンを入力してください"
+    );
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById(
+      "adminAuthStatus"
+    );
+
+
+  status.textContent =
+    "認証しています...";
+
+
+  status.classList.remove(
+    "success"
+  );
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/topics`,
+        {
+
+          method:
+            "GET",
+
+          headers: {
+
+            "Authorization":
+              `Bearer ${token}`
+
+          }
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      adminToken = "";
+
+      status.textContent =
+        "管理者トークンが正しくありません。";
+
+      alert(
+        data.message ||
+        "管理者トークンが正しくありません"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       認証成功
+    */
+
+    adminToken =
+      token;
+
+
+    editingTopics =
+      Array.isArray(data.topics)
+        ? [...data.topics]
+        : [];
+
+
+    status.textContent =
+      "管理者として認証されています。";
+
+    status.classList.add(
+      "success"
+    );
+
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display =
+      "block";
+
+
+    renderAdminTopics();
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    adminToken = "";
+
+
+    status.textContent =
+      "認証できませんでした。";
+
+
+    alert(
+      "管理者認証に失敗しました。"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   管理者トピック表示
+========================= */
+
+function renderAdminTopics() {
+
+  const container =
+    document.getElementById(
+      "adminTopicList"
+    );
+
+
+  if (!container) {
+
+    return;
+
+  }
+
+
+  if (!editingTopics.length) {
+
+    container.innerHTML =
+      `
+        <div class="empty">
+          トピックがありません。
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    editingTopics.map(
+      (topic, index) => {
+
+        return `
+          <div
+            class="topic-setting-row">
+
+            <input
+              type="text"
+              maxlength="30"
+              value="${escapeHtml(topic)}"
+              oninput="updateTopicName(${index}, this.value)">
+
+
+            <div
+              class="topic-setting-actions">
+
+              <button
+                onclick="moveTopicUp(${index})"
+                title="上へ">
+
+                ↑
+
+              </button>
+
+
+              <button
+                onclick="moveTopicDown(${index})"
+                title="下へ">
+
+                ↓
+
+              </button>
+
+
+              <button
+                onclick="deleteTopic(${index})"
+                title="削除">
+
+                ×
+
+              </button>
+
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("");
+
+}
+
+
+/* =========================
+   トピック名変更
+========================= */
+
+function updateTopicName(
+  index,
+  value
+) {
+
+  if (
+    index < 0 ||
+    index >= editingTopics.length
+  ) {
+
+    return;
+
+  }
+
+
+  editingTopics[index] =
+    value;
+
+}
+
+
+/* =========================
+   トピック追加
+========================= */
+
+function addTopic() {
+
+  const input =
+    document.getElementById(
+      "newTopicInput"
+    );
+
+
+  const value =
+    input.value.trim();
+
+
+  if (!value) {
+
+    alert(
+      "トピック名を入力してください"
+    );
+
+    return;
+
+  }
+
+
+  if (value.length > 30) {
+
+    alert(
+      "トピック名は30文字以内にしてください"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     同じ名前のトピックを防止
+  */
+
+  const exists =
+    editingTopics.some(
+      topic =>
+        topic === value
+    );
+
+
+  if (exists) {
+
+    alert(
+      "同じ名前のトピックがあります"
+    );
+
+    return;
+
+  }
+
+
+  editingTopics.push(
+    value
+  );
+
+
+  input.value =
+    "";
+
+
+  renderAdminTopics();
+
+}
+
+
+/* =========================
+   トピック削除
+========================= */
+
+function deleteTopic(
+  index
+) {
+
+  if (
+    index < 0 ||
+    index >= editingTopics.length
+  ) {
+
+    return;
+
+  }
+
+
+  const name =
+    editingTopics[index];
+
+
+  const result =
+    confirm(
+      `「${name}」を削除しますか？`
+    );
+
+
+  if (!result) {
+
+    return;
+
+  }
+
+
+  editingTopics.splice(
+    index,
+    1
+  );
+
+
+  renderAdminTopics();
+
+}
+
+
+/* =========================
+   トピック上移動
+========================= */
+
+function moveTopicUp(
+  index
+) {
+
+  if (
+    index <= 0 ||
+    index >= editingTopics.length
+  ) {
+
+    return;
+
+  }
+
+
+  const temp =
+    editingTopics[index - 1];
+
+
+  editingTopics[index - 1] =
+    editingTopics[index];
+
+
+  editingTopics[index] =
+    temp;
+
+
+  renderAdminTopics();
+
+}
+
+
+/* =========================
+   トピック下移動
+========================= */
+
+function moveTopicDown(
+  index
+) {
+
+  if (
+    index < 0 ||
+    index >= editingTopics.length - 1
+  ) {
+
+    return;
+
+  }
+
+
+  const temp =
+    editingTopics[index + 1];
+
+
+  editingTopics[index + 1] =
+    editingTopics[index];
+
+
+  editingTopics[index] =
+    temp;
+
+
+  renderAdminTopics();
+
+}
+
+
+/* =========================
+   トピック保存
+========================= */
+
+async function saveTopics() {
+
+  if (!adminToken) {
+
+    alert(
+      "先に管理者認証をしてください"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     入力値を整理
+  */
+
+  const cleaned =
+    editingTopics
+      .map(
+        topic =>
+          String(topic || "").trim()
+      )
+      .filter(
+        topic =>
+          topic.length > 0
+      );
+
+
+  if (!cleaned.length) {
+
+    alert(
+      "少なくとも1つのトピックを設定してください"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     重複削除
+  */
+
+  const unique =
+    [];
+
+
+  cleaned.forEach(
+    topic => {
+
+      if (
+        !unique.includes(
+          topic
+        )
+      ) {
+
+        unique.push(
+          topic
+        );
+
+      }
+
+    }
+  );
+
+
+  if (unique.length !== cleaned.length) {
+
+    alert(
+      "同じ名前のトピックが複数あるため、重複を削除して保存します。"
+    );
+
+  }
+
+
+  editingTopics =
+    unique;
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/topics`,
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              `Bearer ${adminToken}`
+
+          },
+
+          body:
+            JSON.stringify({
+
+              topics:
+                editingTopics
+
+            })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      /*
+         トークンが無効になった場合
+      */
+
+      if (
+        response.status === 401
+      ) {
+
+        adminToken =
+          "";
+
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "adminAuthStatus"
+        ).textContent =
+          "管理者トークンが無効です。";
+
+
+      }
+
+
+      alert(
+        data.message ||
+        "トピックを保存できませんでした"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       サイト側のトピックも更新
+    */
+
+    topics =
+      Array.isArray(data.topics)
+        ? data.topics
+        : [...editingTopics];
+
+
+    editingTopics =
+      [...topics];
+
+
+    renderTopicNav();
+
+    renderGenreSelect();
+
+    renderAdminTopics();
+
+
+    alert(
+      "トピックを保存しました"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "トピックを保存できませんでした"
+    );
 
   }
 
@@ -1720,7 +2746,7 @@ function displayNews(
         return `
           <article
             class="news-card"
-            onclick="openArticle('${escapeHtml(item.id)}')">
+            onclick="openArticle('${escapeJs(item.id)}')">
 
             <div class="news-card-image">
 
@@ -1956,7 +2982,7 @@ async function loadComments(
 
               <div
                 class="comment-name"
-                onclick="openProfile('${escapeHtml(comment.userId)}')">
+                onclick="openProfile('${escapeJs(comment.userId)}')">
 
                 ${escapeHtml(
                   comment.displayName ||
@@ -2218,7 +3244,7 @@ async function loadFollowing() {
           return `
             <div
               class="follow-user"
-              onclick="openProfile('${escapeHtml(user.userId)}')">
+              onclick="openProfile('${escapeJs(user.userId)}')">
 
               ${escapeHtml(
                 user.displayName
@@ -2794,6 +3820,44 @@ function openAdmin() {
   ).style.display =
     "block";
 
+
+  /*
+     すでに認証済みなら
+     そのまま管理者パネルを表示
+  */
+
+  if (adminToken) {
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "adminAuthStatus"
+    ).textContent =
+      "管理者として認証されています。";
+
+
+    document.getElementById(
+      "adminAuthStatus"
+    ).classList.add(
+      "success"
+    );
+
+
+    renderAdminTopics();
+
+  } else {
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display =
+      "none";
+
+  }
+
 }
 
 
@@ -2803,10 +3867,19 @@ function openAdmin() {
 
 async function createNews() {
 
-  const token =
-    document.getElementById(
-      "adminToken"
-    ).value;
+  /*
+     管理者認証済みのトークンを使用
+  */
+
+  if (!adminToken) {
+
+    alert(
+      "先に管理者として認証してください"
+    );
+
+    return;
+
+  }
 
 
   const title =
@@ -2840,13 +3913,12 @@ async function createNews() {
 
 
   if (
-    !token ||
     !title ||
     !body
   ) {
 
     alert(
-      "管理者トークン・タイトル・本文を入力してください"
+      "タイトルと本文を入力してください"
     );
 
     return;
@@ -2870,7 +3942,7 @@ async function createNews() {
               "application/json",
 
             "Authorization":
-              `Bearer ${token}`
+              `Bearer ${adminToken}`
 
           },
 
@@ -2895,6 +3967,33 @@ async function createNews() {
 
     if (!data.success) {
 
+      /*
+         認証切れ
+      */
+
+      if (
+        response.status === 401
+      ) {
+
+        adminToken =
+          "";
+
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "adminAuthStatus"
+        ).textContent =
+          "管理者トークンが無効です。";
+
+
+      }
+
+
       alert(
         data.message ||
         "ニュースを作成できませんでした"
@@ -2910,10 +4009,9 @@ async function createNews() {
     );
 
 
-    closeModal(
-      "adminModal"
-    );
-
+    /*
+       ニュース入力欄をクリア
+    */
 
     document.getElementById(
       "newsTitle"
@@ -2935,10 +4033,19 @@ async function createNews() {
     ).value = "";
 
 
+    /*
+       投稿後は最新ニュースへ
+    */
+
     await loadNews();
 
 
   } catch (error) {
+
+    console.error(
+      error
+    );
+
 
     alert(
       "ニュースを公開できませんでした"
@@ -3058,6 +4165,41 @@ function escapeHtml(
 
 
 /* =========================
+   JavaScript用エスケープ
+========================= */
+
+function escapeJs(
+  value
+) {
+
+  return String(
+    value || ""
+  )
+
+    .replaceAll(
+      "\\",
+      "\\\\"
+    )
+
+    .replaceAll(
+      "'",
+      "\\'"
+    )
+
+    .replaceAll(
+      "\n",
+      "\\n"
+    )
+
+    .replaceAll(
+      "\r",
+      "\\r"
+    );
+
+}
+
+
+/* =========================
    起動
 ========================= */
 
@@ -3067,6 +4209,13 @@ async function init() {
 
 
   await loadUser();
+
+
+  /*
+     トピックを最初に取得
+  */
+
+  await loadTopics();
 
 
   const name =
@@ -3098,6 +4247,10 @@ async function init() {
 
   }
 
+
+  /*
+     ニュースを読み込む
+  */
 
   await loadNews();
 
