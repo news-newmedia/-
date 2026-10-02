@@ -497,7 +497,6 @@ main {
   border-radius: 50%;
 
   background: #eeeeee;
-
   color: #555;
 
   display: flex;
@@ -653,6 +652,25 @@ main {
 
 .follow-list {
   margin-top: 20px;
+}
+
+/* マイページ内ユーザー検索 */
+.user-search {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.user-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+
+.user-search-results {
+  margin-top: 10px;
 }
 
 .follow-user {
@@ -979,7 +997,6 @@ main {
 <h1>
 Melodia News
 </h1>
-
 <p>
 いま知りたいニュースを、ひとつの場所に
 </p>
@@ -1173,6 +1190,36 @@ Melodia News
 
 </div>
 
+</div>
+
+
+<hr>
+
+
+<h3>
+ユーザーを検索
+</h3>
+
+<div class="user-search">
+
+<input
+  id="userSearchInput"
+  type="search"
+  maxlength="30"
+  placeholder="名前を入力..."
+  onkeydown="if(event.key === 'Enter') searchUsers()">
+
+<button
+  class="primary"
+  onclick="searchUsers()">
+検索
+</button>
+
+</div>
+
+<div
+  id="userSearchResults"
+  class="user-search-results">
 </div>
 
 
@@ -1449,7 +1496,7 @@ Melodia News
 
 <div
   id="adminPanel"
-  class="admin-panel">
+class="admin-panel">
 
 
 <!-- =========================
@@ -1589,9 +1636,7 @@ Melodia News
 
 
 </div>
-
 </div>
-
 </div>
 
 
@@ -1948,8 +1993,7 @@ function renderGenreSelect() {
 ========================= */
 
 async function authenticateAdmin() {
-
-  const input =
+const input =
     document.getElementById(
       "adminToken"
     );
@@ -2448,9 +2492,7 @@ async function saveTopics() {
     );
 
   }
-
-
-  editingTopics =
+editingTopics =
     unique;
 
 
@@ -2949,7 +2991,6 @@ async function loadComments(
 
     container.innerHTML =
       "<p>コメントを取得できませんでした。</p>";
-
   }
 
 }
@@ -3082,6 +3123,61 @@ async function openMyPage() {
 
 
   await loadFollowing();
+
+}
+
+
+/* =========================
+   ユーザー検索
+========================= */
+
+async function searchUsers() {
+
+  const input =
+    document.getElementById("userSearchInput");
+
+  const container =
+    document.getElementById("userSearchResults");
+
+  const name = input.value.trim();
+
+  if (!name) {
+    container.innerHTML = "<p>名前を入力してください。</p>";
+    return;
+  }
+
+  container.textContent = "検索しています...";
+
+  try {
+    const response = await fetch(
+      `${API_URL}/users/search?name=${encodeURIComponent(name)}&excludeUserId=${encodeURIComponent(getUserId())}`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "検索に失敗しました");
+    }
+
+    const users = data.users || [];
+
+    if (!users.length) {
+      container.innerHTML = "<p>該当するユーザーはいません。</p>";
+      return;
+    }
+
+    container.innerHTML = users.map(user => `
+      <div
+        class="follow-user"
+        onclick="openProfile('${escapeJs(user.userId)}')">
+        ${escapeHtml(user.displayName || "名無し")}
+      </div>
+    `).join("");
+
+  } catch (error) {
+    console.error("ユーザー検索エラー:", error);
+    container.textContent = "ユーザーを検索できませんでした。";
+  }
 
 }
 
@@ -3392,9 +3488,7 @@ async function openProfile(
       "profileDisplayName"
     ).textContent =
       "名無し";
-
-
-    document.getElementById(
+document.getElementById(
       "profileUserId"
     ).textContent =
       userId;
@@ -3894,26 +3988,22 @@ async function createNews() {
 
 
     if (!data.success) {
-
-      if (
+if (
         response.status === 401
       ) {
 
         adminToken =
           "";
 
-
         document.getElementById(
           "adminPanel"
         ).style.display =
           "none";
 
-
         document.getElementById(
           "adminAuthStatus"
         ).textContent =
           "管理者トークンが無効です。";
-
 
       }
 
