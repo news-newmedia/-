@@ -1496,7 +1496,7 @@ Melodia News
 
 <div
   id="adminPanel"
-class="admin-panel">
+  class="admin-panel">
 
 
 <!-- =========================
@@ -1549,6 +1549,33 @@ class="admin-panel">
 トピックを保存
 
 </button>
+
+</div>
+
+
+<!-- =========================
+     記事管理（追加機能）
+========================= -->
+
+<div class="admin-section">
+
+<h3>
+記事管理
+</h3>
+
+<p>
+公開中の記事を非表示にしたり、不要な記事を削除したりできます。
+</p>
+
+<div
+  id="adminNewsList"
+  class="admin-topic-list">
+
+<div class="empty">
+記事を読み込んでいます...
+</div>
+
+</div>
 
 </div>
 
@@ -1699,13 +1726,11 @@ function getUserId() {
       "newsHubUserId"
     );
 
-
   if (!id) {
 
     id =
       "user_" +
       crypto.randomUUID();
-
 
     localStorage.setItem(
       "newsHubUserId",
@@ -1713,7 +1738,6 @@ function getUserId() {
     );
 
   }
-
 
   return id;
 
@@ -1744,7 +1768,6 @@ async function loadUser() {
   const userId =
     getUserId();
 
-
   try {
 
     const response =
@@ -1752,10 +1775,8 @@ async function loadUser() {
         `${API_URL}/user?userId=${encodeURIComponent(userId)}`
       );
 
-
     const data =
       await response.json();
-
 
     if (
       data.success &&
@@ -1792,7 +1813,6 @@ async function loadTopics() {
         `${API_URL}/topics`
       );
 
-
     if (!response.ok) {
 
       throw new Error(
@@ -1801,10 +1821,8 @@ async function loadTopics() {
 
     }
 
-
     const data =
       await response.json();
-
 
     if (
       data.success &&
@@ -1820,11 +1838,9 @@ async function loadTopics() {
 
     }
 
-
     renderTopicNav();
 
     renderGenreSelect();
-
 
   } catch (error) {
 
@@ -1832,7 +1848,6 @@ async function loadTopics() {
       "トピック読み込みエラー:",
       error
     );
-
 
     topics = [
       "国内",
@@ -1848,7 +1863,6 @@ async function loadTopics() {
       "スポーツ",
       "映画・アニメ"
     ];
-
 
     renderTopicNav();
 
@@ -1870,20 +1884,15 @@ function renderTopicNav() {
       "topicNav"
     );
 
-
   if (!nav) {
-
     return;
-
   }
-
 
   let html = `
     <button onclick="loadNews()">
       トップ
     </button>
   `;
-
 
   topics.forEach(
     topic => {
@@ -1899,7 +1908,6 @@ function renderTopicNav() {
 
     }
   );
-
 
   nav.innerHTML =
     html;
@@ -1918,20 +1926,14 @@ function renderGenreSelect() {
       "newsGenre"
     );
 
-
   if (!select) {
-
     return;
-
   }
-
 
   const oldValue =
     select.value;
 
-
   let html = "";
-
 
   topics.forEach(
     topic => {
@@ -1945,7 +1947,6 @@ function renderGenreSelect() {
     }
   );
 
-
   if (!topics.length) {
 
     html = `
@@ -1956,17 +1957,14 @@ function renderGenreSelect() {
 
   }
 
-
   html += `
     <option value="その他">
       その他
     </option>
   `;
 
-
   select.innerHTML =
     html;
-
 
   const exists =
     Array.from(
@@ -1976,7 +1974,6 @@ function renderGenreSelect() {
         option.value ===
         oldValue
     );
-
 
   if (exists) {
 
@@ -1993,15 +1990,14 @@ function renderGenreSelect() {
 ========================= */
 
 async function authenticateAdmin() {
-const input =
+
+  const input =
     document.getElementById(
       "adminToken"
     );
 
-
   const token =
     input.value.trim();
-
 
   if (!token) {
 
@@ -2013,21 +2009,17 @@ const input =
 
   }
 
-
   const status =
     document.getElementById(
       "adminAuthStatus"
     );
 
-
   status.textContent =
     "認証しています...";
-
 
   status.classList.remove(
     "success"
   );
-
 
   try {
 
@@ -2035,23 +2027,16 @@ const input =
       await fetch(
         `${API_URL}/admin/topics`,
         {
-
-          method:
-            "GET",
+          method: "GET",
           headers: {
-
             "Authorization":
               `Bearer ${token}`
-
           }
-
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (
       !response.ok ||
@@ -2072,16 +2057,13 @@ const input =
 
     }
 
-
     adminToken =
       token;
-
 
     editingTopics =
       Array.isArray(data.topics)
         ? [...data.topics]
         : [];
-
 
     status.textContent =
       "管理者として認証されています。";
@@ -2090,29 +2072,24 @@ const input =
       "success"
     );
 
-
     document.getElementById(
       "adminPanel"
     ).style.display =
       "block";
 
-
     renderAdminTopics();
 
+    // 追加：管理者用の記事一覧を読み込む
+    await loadAdminNews();
 
   } catch (error) {
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     adminToken = "";
 
-
     status.textContent =
       "認証できませんでした。";
-
 
     alert(
       "管理者認証に失敗しました。"
@@ -2134,13 +2111,9 @@ function renderAdminTopics() {
       "adminTopicList"
     );
 
-
   if (!container) {
-
     return;
-
   }
-
 
   if (!editingTopics.length) {
 
@@ -2154,7 +2127,6 @@ function renderAdminTopics() {
     return;
 
   }
-
 
   container.innerHTML =
     editingTopics.map(
@@ -2170,7 +2142,6 @@ function renderAdminTopics() {
               value="${escapeHtml(topic)}"
               oninput="updateTopicName(${index}, this.value)">
 
-
             <div
               class="topic-setting-actions">
 
@@ -2182,7 +2153,6 @@ function renderAdminTopics() {
 
               </button>
 
-
               <button
                 onclick="moveTopicDown(${index})"
                 title="下へ">
@@ -2190,7 +2160,6 @@ function renderAdminTopics() {
                 ↓
 
               </button>
-
 
               <button
                 onclick="deleteTopic(${index})"
@@ -2224,11 +2193,8 @@ function updateTopicName(
     index < 0 ||
     index >= editingTopics.length
   ) {
-
     return;
-
   }
-
 
   editingTopics[index] =
     value;
@@ -2247,10 +2213,8 @@ function addTopic() {
       "newTopicInput"
     );
 
-
   const value =
     input.value.trim();
-
 
   if (!value) {
 
@@ -2262,7 +2226,6 @@ function addTopic() {
 
   }
 
-
   if (value.length > 30) {
 
     alert(
@@ -2273,13 +2236,11 @@ function addTopic() {
 
   }
 
-
   const exists =
     editingTopics.some(
       topic =>
         topic === value
     );
-
 
   if (exists) {
 
@@ -2291,15 +2252,11 @@ function addTopic() {
 
   }
 
-
   editingTopics.push(
     value
   );
 
-
-  input.value =
-    "";
-
+  input.value = "";
 
   renderAdminTopics();
 
@@ -2310,42 +2267,31 @@ function addTopic() {
    トピック削除
 ========================= */
 
-function deleteTopic(
-  index
-) {
+function deleteTopic(index) {
 
   if (
     index < 0 ||
     index >= editingTopics.length
   ) {
-
     return;
-
   }
-
 
   const name =
     editingTopics[index];
-
 
   const result =
     confirm(
       `「${name}」を削除しますか？`
     );
 
-
   if (!result) {
-
     return;
-
   }
-
 
   editingTopics.splice(
     index,
     1
   );
-
 
   renderAdminTopics();
 
@@ -2356,31 +2302,23 @@ function deleteTopic(
    トピック上移動
 ========================= */
 
-function moveTopicUp(
-  index
-) {
+function moveTopicUp(index) {
 
   if (
     index <= 0 ||
     index >= editingTopics.length
   ) {
-
     return;
-
   }
-
 
   const temp =
     editingTopics[index - 1];
 
-
   editingTopics[index - 1] =
     editingTopics[index];
 
-
   editingTopics[index] =
     temp;
-
 
   renderAdminTopics();
 
@@ -2391,31 +2329,23 @@ function moveTopicUp(
    トピック下移動
 ========================= */
 
-function moveTopicDown(
-  index
-) {
+function moveTopicDown(index) {
 
   if (
     index < 0 ||
     index >= editingTopics.length - 1
   ) {
-
     return;
-
   }
-
 
   const temp =
     editingTopics[index + 1];
 
-
   editingTopics[index + 1] =
     editingTopics[index];
 
-
   editingTopics[index] =
     temp;
-
 
   renderAdminTopics();
 
@@ -2438,7 +2368,6 @@ async function saveTopics() {
 
   }
 
-
   const cleaned =
     editingTopics
       .map(
@@ -2450,7 +2379,6 @@ async function saveTopics() {
           topic.length > 0
       );
 
-
   if (!cleaned.length) {
 
     alert(
@@ -2461,29 +2389,21 @@ async function saveTopics() {
 
   }
 
-
-  const unique =
-    [];
-
+  const unique = [];
 
   cleaned.forEach(
     topic => {
 
       if (
-        !unique.includes(
-          topic
-        )
+        !unique.includes(topic)
       ) {
 
-        unique.push(
-          topic
-        );
+        unique.push(topic);
 
       }
 
     }
   );
-
 
   if (unique.length !== cleaned.length) {
 
@@ -2492,9 +2412,9 @@ async function saveTopics() {
     );
 
   }
-editingTopics =
-    unique;
 
+  editingTopics =
+    unique;
 
   try {
 
@@ -2502,35 +2422,24 @@ editingTopics =
       await fetch(
         `${API_URL}/admin/topics`,
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json",
 
             "Authorization":
               `Bearer ${adminToken}`
-
           },
 
-          body:
-            JSON.stringify({
-
-              topics:
-                editingTopics
-
-            })
-
+          body: JSON.stringify({
+            topics: editingTopics
+          })
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (
       !response.ok ||
@@ -2541,24 +2450,19 @@ editingTopics =
         response.status === 401
       ) {
 
-        adminToken =
-          "";
-
+        adminToken = "";
 
         document.getElementById(
           "adminPanel"
         ).style.display =
           "none";
 
-
         document.getElementById(
           "adminAuthStatus"
         ).textContent =
           "管理者トークンが無効です。";
 
-
       }
-
 
       alert(
         data.message ||
@@ -2569,16 +2473,13 @@ editingTopics =
 
     }
 
-
     topics =
       Array.isArray(data.topics)
         ? data.topics
         : [...editingTopics];
 
-
     editingTopics =
       [...topics];
-
 
     renderTopicNav();
 
@@ -2586,21 +2487,397 @@ editingTopics =
 
     renderAdminTopics();
 
-
     alert(
       "トピックを保存しました"
     );
 
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "トピックを保存できませんでした"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   管理者：記事一覧読み込み
+========================= */
+
+async function loadAdminNews() {
+
+  const container =
+    document.getElementById(
+      "adminNewsList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  if (!adminToken) {
+
+    container.innerHTML =
+      `<div class="empty">管理者認証が必要です。</div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    `<div class="empty">記事を読み込んでいます...</div>`;
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/news`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization":
+              `Bearer ${adminToken}`
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      if (response.status === 401) {
+
+        adminToken = "";
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display = "none";
+
+        document.getElementById(
+          "adminAuthStatus"
+        ).textContent =
+          "管理者トークンが無効です。";
+
+      }
+
+      throw new Error(
+        data.message || "記事一覧を取得できませんでした"
+      );
+
+    }
+
+    const news =
+      data.news || [];
+
+    renderAdminNews(news);
 
   } catch (error) {
 
     console.error(
+      "管理者記事一覧エラー:",
       error
     );
 
+    container.innerHTML =
+      `<div class="empty">記事一覧を取得できませんでした。</div>`;
+
+  }
+
+}
+
+
+/* =========================
+   管理者：記事一覧表示
+========================= */
+
+function renderAdminNews(news) {
+
+  const container =
+    document.getElementById(
+      "adminNewsList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  if (!news.length) {
+
+    container.innerHTML =
+      `<div class="empty">記事はありません。</div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    news.map(item => {
+
+      const hidden =
+        item.hidden === true;
+
+      const statusText =
+        hidden ? "非表示" : "公開中";
+
+      const buttonText =
+        hidden ? "再表示" : "非表示にする";
+
+      const buttonAction =
+        hidden ? "false" : "true";
+
+      return `
+        <div class="topic-setting-row">
+
+          <div style="flex:1; min-width:0;">
+
+            <div style="font-weight:bold; overflow-wrap:anywhere;">
+              ${escapeHtml(item.title || "タイトルなし")}
+            </div>
+
+            <div style="font-size:12px; color:#777; margin-top:5px;">
+              ${escapeHtml(item.genre || "その他")}
+              ・
+              ${formatDate(item.createdAt)}
+              ・
+              ${statusText}
+            </div>
+
+          </div>
+
+          <div class="topic-setting-actions">
+
+            <button
+              type="button"
+              title="${buttonText}"
+              onclick="setNewsHidden('${escapeJs(item.id)}', ${buttonAction})"
+              style="width:auto; padding:0 10px;">
+
+              ${buttonText}
+
+            </button>
+
+            <button
+              type="button"
+              title="完全削除"
+              onclick="deleteNews('${escapeJs(item.id)}')">
+
+              ×
+
+            </button>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================
+   管理者：記事の非表示・再表示
+========================= */
+
+async function setNewsHidden(
+  id,
+  hidden
+) {
+
+  if (!adminToken) {
 
     alert(
-      "トピックを保存できませんでした"
+      "先に管理者認証をしてください"
+    );
+
+    return;
+
+  }
+
+  const message =
+    hidden
+      ? "この記事を非表示にしますか？"
+      : "この記事を再表示しますか？";
+
+  if (!confirm(message)) {
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/news/${encodeURIComponent(id)}`,
+        {
+          method: "PATCH",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              `Bearer ${adminToken}`
+          },
+
+          body: JSON.stringify({
+            hidden
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      if (response.status === 401) {
+
+        adminToken = "";
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display = "none";
+
+      }
+
+      alert(
+        data.message ||
+        "記事の設定を変更できませんでした"
+      );
+
+      return;
+
+    }
+
+    await loadAdminNews();
+
+    // 公開側の記事一覧も更新
+    await loadNews();
+
+    alert(
+      hidden
+        ? "記事を非表示にしました"
+        : "記事を再表示しました"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "記事の設定を変更できませんでした"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   管理者：記事の完全削除
+========================= */
+
+async function deleteNews(id) {
+
+  if (!adminToken) {
+
+    alert(
+      "先に管理者認証をしてください"
+    );
+
+    return;
+
+  }
+
+  const result =
+    confirm(
+      "この記事を完全に削除しますか？\n\n削除した記事は元に戻せません。"
+    );
+
+  if (!result) {
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/news/${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            "Authorization":
+              `Bearer ${adminToken}`
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      if (response.status === 401) {
+
+        adminToken = "";
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display = "none";
+
+      }
+
+      alert(
+        data.message ||
+        "記事を削除できませんでした"
+      );
+
+      return;
+
+    }
+
+    await loadAdminNews();
+
+    // 公開側の記事一覧も更新
+    await loadNews();
+
+    // 削除した記事を開いていた場合は詳細画面を閉じる
+    if (
+      currentNews &&
+      currentNews.id === id
+    ) {
+
+      closeModal("articleModal");
+
+      currentNews = null;
+
+    }
+
+    alert(
+      "記事を完全に削除しました"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "記事を削除できませんでした"
     );
 
   }
@@ -2621,14 +2898,12 @@ async function loadNews(
       "newsContainer"
     );
 
-
   container.innerHTML =
     `
       <div class="empty">
         ニュースを読み込んでいます...
       </div>
     `;
-
 
   try {
 
@@ -2637,10 +2912,8 @@ async function loadNews(
         ? `${API_URL}/news?genre=${encodeURIComponent(genre)}`
         : `${API_URL}/news`;
 
-
     const response =
       await fetch(url);
-
 
     if (!response.ok) {
 
@@ -2650,24 +2923,19 @@ async function loadNews(
 
     }
 
-
     const data =
       await response.json();
 
-
     allNews =
       data.news || [];
-
 
     displayNews(
       allNews
     );
 
-
   } catch (error) {
 
     console.error(error);
-
 
     container.innerHTML =
       `
@@ -2685,15 +2953,12 @@ async function loadNews(
    ニュース表示
 ========================= */
 
-function displayNews(
-  news
-) {
+function displayNews(news) {
 
   const container =
     document.getElementById(
       "newsContainer"
     );
-
 
   if (!news.length) {
 
@@ -2708,83 +2973,75 @@ function displayNews(
 
   }
 
-
   container.innerHTML =
-    news.map(
-      item => {
+    news.map(item => {
 
-        const image =
-          item.image
-            ? `
-              <img
-                src="${escapeHtml(item.image)}"
-                alt="">
-            `
-            : "";
+      const image =
+        item.image
+          ? `
+            <img
+              src="${escapeHtml(item.image)}"
+              alt="">
+          `
+          : "";
 
+      return `
+        <article
+          class="news-card"
+          onclick="openArticle('${escapeJs(item.id)}')">
 
-        return `
-          <article
-            class="news-card"
-            onclick="openArticle('${escapeJs(item.id)}')">
+          <div class="news-card-image">
 
-            <div class="news-card-image">
+            ${image}
 
-              ${image}
+          </div>
 
-            </div>
+          <div class="news-card-content">
 
+            <span class="genre">
 
-            <div class="news-card-content">
+              ${escapeHtml(
+                item.genre ||
+                "その他"
+              )}
 
-              <span class="genre">
+            </span>
 
-                ${escapeHtml(
-                  item.genre ||
-                  "その他"
-                )}
+            <h3>
 
-              </span>
+              ${escapeHtml(
+                item.title
+              )}
 
+            </h3>
 
-              <h3>
+            <p>
 
-                ${escapeHtml(
-                  item.title
-                )}
+              ${escapeHtml(
+                item.summary ||
+                item.body?.slice(
+                  0,
+                  100
+                ) ||
+                ""
+              )}
 
-              </h3>
+            </p>
 
+            <div class="news-date">
 
-              <p>
-
-                ${escapeHtml(
-                  item.summary ||
-                  item.body?.slice(
-                    0,
-                    100
-                  ) ||
-                  ""
-                )}
-
-              </p>
-
-
-              <div class="news-date">
-
-                ${formatDate(
-                  item.createdAt
-                )}
-
-              </div>
+              ${formatDate(
+                item.createdAt
+              )}
 
             </div>
 
-          </article>
-        `;
+          </div>
 
-      }
-    ).join("");
+        </article>
+      `;
+
+    }).join("");
 
 }
 
@@ -2803,7 +3060,6 @@ function searchNews() {
       .value
       .toLowerCase();
 
-
   if (!word) {
 
     displayNews(
@@ -2813,7 +3069,6 @@ function searchNews() {
     return;
 
   }
-
 
   const result =
     allNews.filter(
@@ -2842,7 +3097,6 @@ function searchNews() {
       }
     );
 
-
   displayNews(
     result
   );
@@ -2854,9 +3108,7 @@ function searchNews() {
    記事詳細
 ========================= */
 
-async function openArticle(
-  id
-) {
+async function openArticle(id) {
 
   currentNews =
     allNews.find(
@@ -2864,19 +3116,14 @@ async function openArticle(
         item.id === id
     );
 
-
   if (!currentNews) {
-
     return;
-
   }
-
 
   document.getElementById(
     "articleTitle"
   ).textContent =
     currentNews.title;
-
 
   document.getElementById(
     "articleMeta"
@@ -2889,18 +3136,15 @@ async function openArticle(
       )}
     `;
 
-
   document.getElementById(
     "articleBody"
   ).textContent =
     currentNews.body || "";
 
-
   document.getElementById(
     "articleModal"
   ).style.display =
     "block";
-
 
   await loadComments(
     id
@@ -2913,19 +3157,15 @@ async function openArticle(
    コメント読み込み
 ========================= */
 
-async function loadComments(
-  newsId
-) {
+async function loadComments(newsId) {
 
   const container =
     document.getElementById(
       "comments"
     );
 
-
   container.innerHTML =
     "コメントを読み込んでいます...";
-
 
   try {
 
@@ -2934,14 +3174,11 @@ async function loadComments(
         `${API_URL}/comments?newsId=${encodeURIComponent(newsId)}`
       );
 
-
     const data =
       await response.json();
 
-
     const comments =
       data.comments || [];
-
 
     if (!comments.length) {
 
@@ -2952,45 +3189,41 @@ async function loadComments(
 
     }
 
-
     container.innerHTML =
-      comments.map(
-        comment => {
+      comments.map(comment => {
 
-          return `
-            <div class="comment">
+        return `
+          <div class="comment">
 
-              <div
-                class="comment-name"
-                onclick="openProfile('${escapeJs(comment.userId)}')">
+            <div
+              class="comment-name"
+              onclick="openProfile('${escapeJs(comment.userId)}')">
 
-                ${escapeHtml(
-                  comment.displayName ||
-                  "名無し"
-                )}
-
-              </div>
-
-
-              <div class="comment-text">
-
-                ${escapeHtml(
-                  comment.text
-                )}
-
-              </div>
+              ${escapeHtml(
+                comment.displayName ||
+                "名無し"
+              )}
 
             </div>
-          `;
 
-        }
-      ).join("");
+            <div class="comment-text">
 
+              ${escapeHtml(
+                comment.text
+              )}
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
 
   } catch (error) {
 
     container.innerHTML =
       "<p>コメントを取得できませんでした。</p>";
+
   }
 
 }
@@ -3003,28 +3236,20 @@ async function loadComments(
 async function postComment() {
 
   if (!currentNews) {
-
     return;
-
   }
-
 
   const input =
     document.getElementById(
       "commentInput"
     );
 
-
   const text =
     input.value.trim();
 
-
   if (!text) {
-
     return;
-
   }
-
 
   try {
 
@@ -3032,40 +3257,33 @@ async function postComment() {
       await fetch(
         `${API_URL}/comments`,
         {
+          method: "POST",
 
-          method:
-            "POST",
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              newsId:
-                currentNews.id,
+            newsId:
+              currentNews.id,
 
-              userId:
-                getUserId(),
+            userId:
+              getUserId(),
 
-              displayName:
-                getDisplayName(),
+            displayName:
+              getDisplayName(),
 
-              text:
-                text
+            text:
+              text
 
-            })
-
+          })
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (!data.success) {
 
@@ -3078,14 +3296,11 @@ async function postComment() {
 
     }
 
-
     input.value = "";
-
 
     await loadComments(
       currentNews.id
     );
-
 
   } catch (error) {
 
@@ -3109,18 +3324,15 @@ async function openMyPage() {
   ).style.display =
     "block";
 
-
   document.getElementById(
     "myDisplayName"
   ).textContent =
     getDisplayName();
 
-
   document.getElementById(
     "myUserId"
   ).textContent =
     getUserId();
-
 
   await loadFollowing();
 
@@ -3139,44 +3351,74 @@ async function searchUsers() {
   const container =
     document.getElementById("userSearchResults");
 
-  const name = input.value.trim();
+  const name =
+    input.value.trim();
 
   if (!name) {
-    container.innerHTML = "<p>名前を入力してください。</p>";
+
+    container.innerHTML =
+      "<p>名前を入力してください。</p>";
+
     return;
+
   }
 
-  container.textContent = "検索しています...";
+  container.textContent =
+    "検索しています...";
 
   try {
-    const response = await fetch(
-      `${API_URL}/users/search?name=${encodeURIComponent(name)}&excludeUserId=${encodeURIComponent(getUserId())}`
-    );
 
-    const data = await response.json();
+    const response =
+      await fetch(
+        `${API_URL}/users/search?name=${encodeURIComponent(name)}&excludeUserId=${encodeURIComponent(getUserId())}`
+      );
+
+    const data =
+      await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.message || "検索に失敗しました");
+
+      throw new Error(
+        data.message || "検索に失敗しました"
+      );
+
     }
 
-    const users = data.users || [];
+    const users =
+      data.users || [];
 
     if (!users.length) {
-      container.innerHTML = "<p>該当するユーザーはいません。</p>";
+
+      container.innerHTML =
+        "<p>該当するユーザーはいません。</p>";
+
       return;
+
     }
 
-    container.innerHTML = users.map(user => `
-      <div
-        class="follow-user"
-        onclick="openProfile('${escapeJs(user.userId)}')">
-        ${escapeHtml(user.displayName || "名無し")}
-      </div>
-    `).join("");
+    container.innerHTML =
+      users.map(user => `
+
+        <div
+          class="follow-user"
+          onclick="openProfile('${escapeJs(user.userId)}')">
+
+          ${escapeHtml(user.displayName || "名無し")}
+
+        </div>
+
+      `).join("");
 
   } catch (error) {
-    console.error("ユーザー検索エラー:", error);
-    container.textContent = "ユーザーを検索できませんでした。";
+
+    console.error(
+      "ユーザー検索エラー:",
+      error
+    );
+
+    container.textContent =
+      "ユーザーを検索できませんでした。";
+
   }
 
 }
@@ -3193,7 +3435,6 @@ async function loadFollowing() {
       "followingList"
     );
 
-
   try {
 
     const response =
@@ -3201,14 +3442,11 @@ async function loadFollowing() {
         `${API_URL}/following?userId=${encodeURIComponent(getUserId())}`
       );
 
-
     const data =
       await response.json();
 
-
     const list =
       data.following || [];
-
 
     if (!list.length) {
 
@@ -3218,7 +3456,6 @@ async function loadFollowing() {
       return;
 
     }
-
 
     const users =
       await Promise.all(
@@ -3233,10 +3470,8 @@ async function loadFollowing() {
                   `${API_URL}/user?userId=${encodeURIComponent(item.targetUserId)}`
                 );
 
-
               const data =
                 await response.json();
-
 
               return {
 
@@ -3248,7 +3483,6 @@ async function loadFollowing() {
                   "名無し"
 
               };
-
 
             } catch {
 
@@ -3269,26 +3503,22 @@ async function loadFollowing() {
 
       );
 
-
     container.innerHTML =
-      users.map(
-        user => {
+      users.map(user => {
 
-          return `
-            <div
-              class="follow-user"
-              onclick="openProfile('${escapeJs(user.userId)}')">
+        return `
+          <div
+            class="follow-user"
+            onclick="openProfile('${escapeJs(user.userId)}')">
 
-              ${escapeHtml(
-                user.displayName
-              )}
+            ${escapeHtml(
+              user.displayName
+            )}
 
-            </div>
-          `;
+          </div>
+        `;
 
-        }
-      ).join("");
-
+      }).join("");
 
   } catch (error) {
 
@@ -3311,7 +3541,6 @@ function openEditName() {
   ).value =
     getDisplayName();
 
-
   document.getElementById(
     "nameModal"
   ).style.display =
@@ -3331,10 +3560,8 @@ async function saveDisplayName() {
       "displayNameInput"
     );
 
-
   const name =
     input.value.trim();
-
 
   if (!name) {
 
@@ -3346,7 +3573,6 @@ async function saveDisplayName() {
 
   }
 
-
   if (name.length > 30) {
 
     alert(
@@ -3357,42 +3583,33 @@ async function saveDisplayName() {
 
   }
 
-
   try {
 
     const response =
       await fetch(
         `${API_URL}/user`,
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              userId:
-                getUserId(),
+            userId:
+              getUserId(),
 
-              displayName:
-                name
+            displayName:
+              name
 
-            })
-
+          })
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (!data.success) {
 
@@ -3405,23 +3622,19 @@ async function saveDisplayName() {
 
     }
 
-
     localStorage.setItem(
       "newsHubDisplayName",
       name
     );
-
 
     document.getElementById(
       "myDisplayName"
     ).textContent =
       name;
 
-
     closeModal(
       "nameModal"
     );
-
 
   } catch (error) {
 
@@ -3438,19 +3651,15 @@ async function saveDisplayName() {
    プロフィール
 ========================= */
 
-async function openProfile(
-  userId
-) {
+async function openProfile(userId) {
 
   currentProfileUserId =
     userId;
-
 
   document.getElementById(
     "profileModal"
   ).style.display =
     "block";
-
 
   try {
 
@@ -3459,28 +3668,21 @@ async function openProfile(
         `${API_URL}/user?userId=${encodeURIComponent(userId)}`
       );
 
-
     const data =
       await response.json();
-
 
     const user =
       data.user || {};
 
-
     document.getElementById(
       "profileDisplayName"
     ).textContent =
-      user.displayName ||
-      "名無し";
-
+      user.displayName || "名無し";
 
     document.getElementById(
       "profileUserId"
     ).textContent =
-      user.userId ||
-      userId;
-
+      user.userId || userId;
 
   } catch (error) {
 
@@ -3488,29 +3690,25 @@ async function openProfile(
       "profileDisplayName"
     ).textContent =
       "名無し";
-document.getElementById(
+
+    document.getElementById(
       "profileUserId"
     ).textContent =
       userId;
 
   }
 
-
   const button =
     document.getElementById(
       "followButton"
     );
 
-
   button.textContent =
     "フォローする";
 
-
   button.onclick =
     () =>
-      toggleFollow(
-        userId
-      );
+      toggleFollow(userId);
 
 }
 
@@ -3519,9 +3717,7 @@ document.getElementById(
    フォロー
 ========================= */
 
-async function toggleFollow(
-  userId
-) {
+async function toggleFollow(userId) {
 
   if (
     userId ===
@@ -3536,12 +3732,10 @@ async function toggleFollow(
 
   }
 
-
   const button =
     document.getElementById(
       "followButton"
     );
-
 
   try {
 
@@ -3549,35 +3743,27 @@ async function toggleFollow(
       await fetch(
         `${API_URL}/follow`,
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              userId:
-                getUserId(),
+            userId:
+              getUserId(),
 
-              targetUserId:
-                userId
+            targetUserId:
+              userId
 
-            })
-
+          })
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (data.success) {
 
@@ -3585,7 +3771,6 @@ async function toggleFollow(
         "フォロー中";
 
     }
-
 
   } catch (error) {
 
@@ -3605,11 +3790,8 @@ async function toggleFollow(
 function openChatFromProfile() {
 
   if (!currentProfileUserId) {
-
     return;
-
   }
-
 
   if (
     currentProfileUserId ===
@@ -3624,21 +3806,17 @@ function openChatFromProfile() {
 
   }
 
-
   currentChatUserId =
     currentProfileUserId;
-
 
   closeModal(
     "profileModal"
   );
 
-
   document.getElementById(
     "chatModal"
   ).style.display =
     "block";
-
 
   loadChat();
 
@@ -3656,10 +3834,8 @@ async function loadChat() {
       "chatList"
     );
 
-
   list.innerHTML =
     "チャットを読み込んでいます...";
-
 
   try {
 
@@ -3668,14 +3844,11 @@ async function loadChat() {
         `${API_URL}/chat?userId=${encodeURIComponent(getUserId())}&targetUserId=${encodeURIComponent(currentChatUserId)}`
       );
 
-
     const data =
       await response.json();
 
-
     const messages =
       data.messages || [];
-
 
     if (!messages.length) {
 
@@ -3686,48 +3859,41 @@ async function loadChat() {
 
     }
 
-
     list.innerHTML =
-      messages.map(
-        message => {
+      messages.map(message => {
 
-          const mine =
-            message.userId ===
-            getUserId();
+        const mine =
+          message.userId ===
+          getUserId();
 
+        return `
+          <div
+            class="chat-message ${mine ? "mine" : ""}">
 
-          return `
-            <div
-              class="chat-message ${mine ? "mine" : ""}">
+            <div class="chat-bubble">
 
-              <div class="chat-bubble">
-
-                <div class="chat-name">
-
-                  ${escapeHtml(
-                    message.displayName ||
-                    "名無し"
-                  )}
-
-                </div>
-
+              <div class="chat-name">
 
                 ${escapeHtml(
-                  message.text
+                  message.displayName ||
+                  "名無し"
                 )}
 
               </div>
 
+              ${escapeHtml(
+                message.text
+              )}
+
             </div>
-          `;
 
-        }
-      ).join("");
+          </div>
+        `;
 
+      }).join("");
 
     list.scrollTop =
       list.scrollHeight;
-
 
   } catch (error) {
 
@@ -3750,24 +3916,16 @@ async function sendChat() {
       "chatInput"
     );
 
-
   const text =
     input.value.trim();
 
-
   if (!text) {
-
     return;
-
   }
-
 
   if (!currentChatUserId) {
-
     return;
-
   }
-
 
   try {
 
@@ -3775,41 +3933,33 @@ async function sendChat() {
       await fetch(
         `${API_URL}/chat`,
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              userId:
-                getUserId(),
+            userId:
+              getUserId(),
 
-              targetUserId:
-                currentChatUserId,
+            targetUserId:
+              currentChatUserId,
 
-              displayName:
-                getDisplayName(),
+            displayName:
+              getDisplayName(),
 
-              text:
-                text
+            text:
+              text
 
-            })
-
+          })
         }
       );
 
-
     const data =
       await response.json();
-
 
     if (!data.success) {
 
@@ -3822,12 +3972,9 @@ async function sendChat() {
 
     }
 
-
     input.value = "";
 
-
     await loadChat();
-
 
   } catch (error) {
 
@@ -3851,7 +3998,6 @@ function openAdmin() {
   ).style.display =
     "block";
 
-
   if (adminToken) {
 
     document.getElementById(
@@ -3859,12 +4005,10 @@ function openAdmin() {
     ).style.display =
       "block";
 
-
     document.getElementById(
       "adminAuthStatus"
     ).textContent =
       "管理者として認証されています。";
-
 
     document.getElementById(
       "adminAuthStatus"
@@ -3872,8 +4016,10 @@ function openAdmin() {
       "success"
     );
 
-
     renderAdminTopics();
+
+    // 追加：管理者画面を開くたびに記事一覧を更新
+    loadAdminNews();
 
   } else {
 
@@ -3903,36 +4049,30 @@ async function createNews() {
 
   }
 
-
   const title =
     document.getElementById(
       "newsTitle"
     ).value.trim();
-
 
   const summary =
     document.getElementById(
       "newsSummary"
     ).value.trim();
 
-
   const genre =
     document.getElementById(
       "newsGenre"
     ).value;
-
 
   const body =
     document.getElementById(
       "newsBody"
     ).value.trim();
 
-
   const image =
     document.getElementById(
       "newsImage"
     ).value.trim();
-
 
   if (
     !title ||
@@ -3947,53 +4087,44 @@ async function createNews() {
 
   }
 
-
   try {
 
     const response =
       await fetch(
         `${API_URL}/admin/news`,
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json",
 
             "Authorization":
               `Bearer ${adminToken}`
-
           },
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              title,
-              summary,
-              genre,
-              body,
-              image
+            title,
+            summary,
+            genre,
+            body,
+            image
 
-            })
-
+          })
         }
       );
-
 
     const data =
       await response.json();
 
-
     if (!data.success) {
-if (
+
+      if (
         response.status === 401
       ) {
 
-        adminToken =
-          "";
+        adminToken = "";
 
         document.getElementById(
           "adminPanel"
@@ -4007,7 +4138,6 @@ if (
 
       }
 
-
       alert(
         data.message ||
         "ニュースを作成できませんでした"
@@ -4017,41 +4147,34 @@ if (
 
     }
 
-
     alert(
       "ニュースを公開しました"
     );
-
 
     document.getElementById(
       "newsTitle"
     ).value = "";
 
-
     document.getElementById(
       "newsSummary"
     ).value = "";
-
 
     document.getElementById(
       "newsBody"
     ).value = "";
 
-
     document.getElementById(
       "newsImage"
     ).value = "";
 
-
     await loadNews();
 
+    // 追加：新しい記事を管理者一覧にも反映
+    await loadAdminNews();
 
   } catch (error) {
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     alert(
       "ニュースを公開できませんでした"
@@ -4066,9 +4189,7 @@ if (
    モーダルを閉じる
 ========================= */
 
-function closeModal(
-  id
-) {
+function closeModal(id) {
 
   document.getElementById(
     id
@@ -4110,16 +4231,11 @@ window.addEventListener(
    日付
 ========================= */
 
-function formatDate(
-  date
-) {
+function formatDate(date) {
 
   if (!date) {
-
     return "";
-
   }
-
 
   return new Date(
     date
@@ -4134,9 +4250,7 @@ function formatDate(
    HTMLエスケープ
 ========================= */
 
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
 
   return String(
     value || ""
@@ -4174,9 +4288,7 @@ function escapeHtml(
    JavaScript用エスケープ
 ========================= */
 
-function escapeJs(
-  value
-) {
+function escapeJs(value) {
 
   return String(
     value || ""
@@ -4213,16 +4325,12 @@ async function init() {
 
   getUserId();
 
-
   await loadUser();
-
 
   await loadTopics();
 
-
   const name =
     getDisplayName();
-
 
   if (
     name === "名無し" &&
@@ -4236,11 +4344,9 @@ async function init() {
       "1"
     );
 
-
     document.getElementById(
       "displayNameInput"
     ).value = "";
-
 
     document.getElementById(
       "nameModal"
@@ -4248,7 +4354,6 @@ async function init() {
       "block";
 
   }
-
 
   await loadNews();
 
@@ -4260,3 +4365,4 @@ init();
 </script>
 
 </body>
+</html>
