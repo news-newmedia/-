@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -197,6 +198,73 @@ main {
 
 .hero p {
   color: #666;
+}
+
+
+/* =========================
+   もしもアフィリエイト広告
+========================= */
+
+.ad-container {
+  width: 100%;
+  max-width: 380px;
+
+  margin: 22px auto 28px;
+  padding: 15px;
+
+  background: #ffffff;
+
+  border: 1px solid #e8e8e8;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.04);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ad-label {
+  align-self: flex-start;
+
+  color: #888;
+
+  font-size: 11px;
+
+  margin-bottom: 10px;
+}
+
+.ad-container a {
+  display: block;
+
+  width: 100%;
+
+  text-align: center;
+}
+
+.ad-container a img {
+  display: block;
+
+  width: 100%;
+  max-width: 300px;
+
+  height: auto;
+
+  margin: auto;
+
+  border: none;
+}
+
+@media (max-width: 600px) {
+
+  .ad-container {
+    max-width: 100%;
+
+    margin: 18px auto 24px;
+  }
+
 }
 
 
@@ -1038,6 +1106,39 @@ Melodia News
 </p>
 
 </section>
+
+
+<!-- =========================
+     もしもアフィリエイト広告
+========================= -->
+
+<div class="ad-container">
+
+  <span class="ad-label">PR</span>
+
+  <a
+    href="//af.moshimo.com/af/c/click?a_id=5830246&p_id=7541&pc_id=21774&pl_id=94550"
+    rel="nofollow"
+    referrerpolicy="no-referrer-when-downgrade"
+    attributionsrc
+  >
+    <img
+      src="//image.moshimo.com/af-img/6249/000000094550.jpg"
+      alt="広告"
+    >
+  </a>
+
+  <!-- 広告表示計測 -->
+  <img
+    src="//i.moshimo.com/af/i/impression?a_id=5830246&p_id=7541&pc_id=21774&pl_id=94550"
+    width="1"
+    height="1"
+    style="border:none;"
+    loading="lazy"
+    alt=""
+  >
+
+</div>
 
 
 <!-- =========================
