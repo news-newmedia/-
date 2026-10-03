@@ -201,6 +201,42 @@ main {
 
 
 /* =========================
+   お知らせ
+========================= */
+
+.notice-section {
+  display: none;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  padding: 20px;
+
+  margin-bottom: 25px;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.04);
+}
+
+.notice-section h2 {
+  margin: 0 0 12px;
+
+  font-size: 20px;
+}
+
+.notice-text {
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================
    セクション
 ========================= */
 
@@ -1004,6 +1040,26 @@ Melodia News
 </section>
 
 
+<!-- =========================
+     お知らせ表示（追加）
+========================= -->
+
+<section
+  id="noticeSection"
+  class="notice-section">
+
+<h2>
+お知らせ
+</h2>
+
+<div
+  id="noticeText"
+  class="notice-text">
+</div>
+
+</section>
+
+
 <h2 class="section-title">
 最新ニュース
 </h2>
@@ -1554,6 +1610,43 @@ Melodia News
 
 
 <!-- =========================
+     お知らせ管理（追加）
+========================= -->
+
+<div class="admin-section">
+
+<h3>
+お知らせ管理
+</h3>
+
+<p>
+トップページに表示するお知らせを編集できます。
+</p>
+
+<div class="form-group">
+
+<label>
+お知らせの文章
+</label>
+
+<textarea
+  id="adminNoticeText"
+  placeholder="トップページに表示する文章を入力してください。"></textarea>
+
+</div>
+
+<button
+  class="primary"
+  onclick="saveNotice()">
+
+お知らせを保存
+
+</button>
+
+</div>
+
+
+<!-- =========================
      記事管理（追加機能）
 ========================= -->
 
@@ -1794,6 +1887,201 @@ async function loadUser() {
   } catch (error) {
 
     console.log(error);
+
+  }
+
+}
+
+
+/* =========================
+   お知らせ読み込み（追加）
+========================= */
+
+async function loadNotice() {
+
+  const section =
+    document.getElementById(
+      "noticeSection"
+    );
+
+  const text =
+    document.getElementById(
+      "noticeText"
+    );
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/notice`
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "notice API error"
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    const notice =
+      data.notice || "";
+
+    if (notice.trim()) {
+
+      text.textContent =
+        notice;
+
+      section.style.display =
+        "block";
+
+    } else {
+
+      text.textContent =
+        "";
+
+      section.style.display =
+        "none";
+
+    }
+
+    // 管理者画面の編集欄にも反映
+    const adminInput =
+      document.getElementById(
+        "adminNoticeText"
+      );
+
+    if (adminInput) {
+
+      adminInput.value =
+        notice;
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "お知らせ読み込みエラー:",
+      error
+    );
+
+    section.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =========================
+   お知らせ保存（追加）
+========================= */
+
+async function saveNotice() {
+
+  if (!adminToken) {
+
+    alert(
+      "先に管理者認証をしてください"
+    );
+
+    return;
+
+  }
+
+  const input =
+    document.getElementById(
+      "adminNoticeText"
+    );
+
+  const notice =
+    input.value.trim();
+
+  if (notice.length > 5000) {
+
+    alert(
+      "お知らせは5000文字以内にしてください"
+    );
+
+    return;
+
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/notice`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "Authorization":
+              `Bearer ${adminToken}`
+          },
+
+          body: JSON.stringify({
+            notice
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      if (response.status === 401) {
+
+        adminToken = "";
+
+        document.getElementById(
+          "adminPanel"
+        ).style.display =
+          "none";
+
+        document.getElementById(
+          "adminAuthStatus"
+        ).textContent =
+          "管理者トークンが無効です。";
+
+      }
+
+      alert(
+        data.message ||
+        "お知らせを保存できませんでした"
+      );
+
+      return;
+
+    }
+
+    // 保存成功後、トップページの表示を更新
+    await loadNotice();
+
+    alert(
+      "お知らせを保存しました"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "お知らせ保存エラー:",
+      error
+    );
+
+    alert(
+      "お知らせを保存できませんでした"
+    );
 
   }
 
@@ -2079,8 +2367,11 @@ async function authenticateAdmin() {
 
     renderAdminTopics();
 
-    // 追加：管理者用の記事一覧を読み込む
+    // 管理者用の記事一覧を読み込む
     await loadAdminNews();
+
+    // 追加：お知らせを読み込む
+    await loadAdminNotice();
 
   } catch (error) {
 
@@ -2093,6 +2384,63 @@ async function authenticateAdmin() {
 
     alert(
       "管理者認証に失敗しました。"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   管理者：お知らせ読み込み（追加）
+========================= */
+
+async function loadAdminNotice() {
+
+  if (!adminToken) {
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_URL}/admin/notice`,
+        {
+          method: "GET",
+
+          headers: {
+            "Authorization":
+              `Bearer ${adminToken}`
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "お知らせを取得できませんでした"
+      );
+
+    }
+
+    document.getElementById(
+      "adminNoticeText"
+    ).value =
+      data.notice || "";
+
+  } catch (error) {
+
+    console.error(
+      "管理者お知らせ読み込みエラー:",
+      error
     );
 
   }
@@ -2762,7 +3110,6 @@ async function setNewsHidden(
 
     await loadAdminNews();
 
-    // 公開側の記事一覧も更新
     await loadNews();
 
     alert(
@@ -2853,10 +3200,8 @@ async function deleteNews(id) {
 
     await loadAdminNews();
 
-    // 公開側の記事一覧も更新
     await loadNews();
 
-    // 削除した記事を開いていた場合は詳細画面を閉じる
     if (
       currentNews &&
       currentNews.id === id
@@ -4018,8 +4363,10 @@ function openAdmin() {
 
     renderAdminTopics();
 
-    // 追加：管理者画面を開くたびに記事一覧を更新
     loadAdminNews();
+
+    // 追加：管理者画面を開くたびにお知らせを読み込む
+    loadAdminNotice();
 
   } else {
 
@@ -4169,7 +4516,6 @@ async function createNews() {
 
     await loadNews();
 
-    // 追加：新しい記事を管理者一覧にも反映
     await loadAdminNews();
 
   } catch (error) {
@@ -4328,6 +4674,9 @@ async function init() {
   await loadUser();
 
   await loadTopics();
+
+  // 追加：トップページのお知らせを読み込む
+  await loadNotice();
 
   const name =
     getDisplayName();
